@@ -4,3 +4,4 @@
 * internal/ contains private code, including models, repos, services, controllers, etc.
 * web/ contains vue code
 * tools/ contains auxilliary helper code
+* api/ contains api specs
