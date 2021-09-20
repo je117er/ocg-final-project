@@ -4,11 +4,22 @@ package db
 
 import (
 	"context"
+	"database/sql"
+	"github.com/je117er/ocg-final-project/internal/models"
 )
 
 type Querier interface {
-	GetClinic(ctx context.Context, id string) (Clinic, error)
-	GetProduct(ctx context.Context, id string) (Product, error)
+	GetAllCustomers(ctx context.Context) ([]models.Customer, error)
+	GetBooking(ctx context.Context, customerID int32) (GetBookingRow, error)
+	GetCustomer(ctx context.Context, id int32) (models.Customer, error)
+	GetMedicalHistory(ctx context.Context, customerID int32) (models.MedicalCondition, error)
+	GetProduct(ctx context.Context, slug sql.NullString) (models.Product, error)
+	GetProducts(ctx context.Context) ([]models.Product, error)
+	GetVaccination(ctx context.Context, customerID int32) (GetVaccinationRow, error)
+	UpdateBooking(ctx context.Context, arg UpdateBookingParams) error
+	UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) error
+	UpdateMedicalHistory(ctx context.Context, arg UpdateMedicalHistoryParams) error
+	UpdateStockItem(ctx context.Context, arg UpdateStockItemParams) error
 }
 
 var _ Querier = (*Queries)(nil)

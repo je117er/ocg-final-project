@@ -4,8 +4,7 @@ CREATE TABLE `product`
     `name`                    varchar(255),
     `price`                   decimal,
     `vendor`                  varchar(255),
-    `sku`                     varchar(10),
-    `vaccine_type`            tinyint(1),
+    `vaccine_type`            varchar(100),
     `authorized_ages`         int,
     `dose`                    varchar(255),
     `antigen_nature`          varchar(255),
@@ -16,6 +15,7 @@ CREATE TABLE `product`
     `adjuvant`                varchar(255),
     `alternate_name`          varchar(100),
     `minimum_interval`        int,
+    `immunization_schedule`   int,
     `authorized_interval`     int,
     `extended_interval`       int,
     `background`              text,
@@ -84,13 +84,13 @@ CREATE TABLE `clinic`
     `status`   tinyint(1)
 );
 
-CREATE TABLE `daily_capacity`
+CREATE TABLE `session_capacity`
 (
     `id`                 int PRIMARY KEY AUTO_INCREMENT,
     `clinic_id`          binary(16),
-    `morning_capacity`   int,
-    `afternoon_capacity` int,
-    `evening_capacity`   int,
+    `capacity`           int,
+    `type`              tinyint,
+    `status` tinyint,
     `current_date`       date
 );
 
@@ -179,11 +179,11 @@ ALTER TABLE `price_rule`
 ALTER TABLE `discount`
     ADD FOREIGN KEY (`price_rule_id`) REFERENCES `price_rule` (`id`);
 
-ALTER TABLE `daily_capacity`
+ALTER TABLE session_capacity
     ADD FOREIGN KEY (`clinic_id`) REFERENCES `clinic` (`id`);
 
 ALTER TABLE `booking`
-    ADD FOREIGN KEY (`daily_capacity_id`) REFERENCES `daily_capacity` (`id`);
+    ADD FOREIGN KEY (`daily_capacity_id`) REFERENCES session_capacity (`id`);
 
 ALTER TABLE `stock_item`
     ADD FOREIGN KEY (`clinic_id`) REFERENCES `clinic` (`id`);
