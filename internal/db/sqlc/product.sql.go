@@ -8,7 +8,7 @@ import (
 )
 
 const getProduct = `-- name: GetProduct :one
-SELECT id, price, sku, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date
+SELECT id, name, price, vendor, sku, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date
 FROM product
 WHERE id = ? LIMIT 1
 `
@@ -18,7 +18,9 @@ func (q *Queries) GetProduct(ctx context.Context, id string) (Product, error) {
 	var i Product
 	err := row.Scan(
 		&i.ID,
+		&i.Name,
 		&i.Price,
+		&i.Vendor,
 		&i.Sku,
 		&i.VaccineType,
 		&i.AuthorizedAges,
