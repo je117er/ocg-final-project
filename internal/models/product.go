@@ -1,6 +1,9 @@
 package models
 
-import "database/sql"
+import (
+	"context"
+	"database/sql"
+)
 
 type Product struct {
 	ID                    string
@@ -32,4 +35,13 @@ type Product struct {
 	Image                 sql.NullString
 	LotNumber             sql.NullString
 	ExpiryDate            sql.NullTime
+}
+
+type ProductRepository interface {
+	ByID(ctx context.Context, id string) (Product, error)
+	All(ctx context.Context) ([]Product, error)
+}
+
+type ProductService interface {
+	ByID(ctx context.Context, id string) (Product, error)
 }
