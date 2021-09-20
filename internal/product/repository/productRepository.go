@@ -15,9 +15,11 @@ func NewProductRepository(Conn *sql.DB) *ProductRepository {
 	return &ProductRepository{Conn}
 }
 
-func (p *ProductRepository) ByID(ctx context.Context, id string) (*models.Product, error) {
-	var product *models.Product
-	query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product WHERE id = ? LIMIT 1`
+func (p *ProductRepository) ByID(ctx context.Context, id string) (models.Product, error) {
+	var product models.Product
+ 	//query := `# select * from product where id = uuid_to_bin(?)`
+	//query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product WHERE bin_to_uuid(id) = ?;`
+	query := `select * from product where bin_to_uuid(id) = ?`
 	err := p.Conn.QueryRowContext(ctx, query, id).Scan(
 		&product.ID,
 		&product.Name,
@@ -51,16 +53,17 @@ func (p *ProductRepository) ByID(ctx context.Context, id string) (*models.Produc
 	)
 	switch {
 	case err == sql.ErrNoRows:
-		return nil, fmt.Errorf("No product with id %s\n", id)
+		return models.Product{}, fmt.Errorf("No product with id %s\n", id)
 	case err != nil:
-		return nil, fmt.Errorf("Query error: %v\n", err)
+		return models.Product{}, fmt.Errorf("Query error: %v\n", err)
 	}
 	return product, nil
 }
 
-func (p *ProductRepository) All(ctx context.Context) ([]*models.Product, error) {
-	var products []*models.Product
-	query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product`
+func (p *ProductRepository) All(ctx context.Context) ([]models.Product, error) {
+	var products []models.Product
+	//query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product`
+	query := `select * from product where bin_to_uuid(id) = ?`
 	fmt.Println("you are hereee")
 	rows, err := p.Conn.QueryContext(ctx, query)
 	fmt.Println("you are hereee")
@@ -68,7 +71,7 @@ func (p *ProductRepository) All(ctx context.Context) ([]*models.Product, error) 
 		return nil, nil
 	}
 	defer rows.Close()
-	var product *models.Product
+	var product models.Product
 	for rows.Next() {
 		if err := rows.Scan(
 			&product.ID,
