@@ -1,0 +1,12 @@
+version: "3.0"
+services:
+  mysql-db:
+    container_name: vaccine-covid-19
+    image: mysql
+    ports:
+      - "6033:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456Aa@
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123456Aa@
+      MYSQL_DATABASE: vaccine-covid-19

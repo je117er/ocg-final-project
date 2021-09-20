@@ -7,9 +7,9 @@ import (
 )
 
 type Admin struct {
-	ID           int32
-	Username     sql.NullString
-	PasswordHash sql.NullString
+	ID       int32
+	Username sql.NullString
+	Password sql.NullString
 }
 
 type Booking struct {
@@ -19,13 +19,16 @@ type Booking struct {
 	DateBooked        sql.NullTime
 	TimePeriod        sql.NullInt32
 	DosesCompleted    sql.NullInt32
-	VaccinePicked     sql.NullInt32
+	VaccineName       sql.NullString
+	ExtendedInterval  sql.NullInt32
+	LotNumber         sql.NullString
 	ClinicName        sql.NullString
+	Price             sql.NullString
 	SentReminderEmail sql.NullInt32
 	DailyCapacityID   sql.NullInt32
 	TotalBill         sql.NullString
 	PaymentStatus     sql.NullBool
-	ProductID         sql.NullString
+	StockItemID       sql.NullString
 	DiscountID        int32
 }
 
@@ -38,14 +41,10 @@ type Clinic struct {
 	Status   sql.NullBool
 }
 
-type ClinicProduct struct {
-	ProductID string
-	ClinicID  string
-}
-
 type Constraint struct {
 	ID              int32
-	Code            sql.NullString
+	Code            string
+	Description     sql.NullString
 	VaccineEligible sql.NullBool
 	NeedPrecaution  sql.NullBool
 }
@@ -83,12 +82,11 @@ type Discount struct {
 }
 
 type MedicalCondition struct {
-	ID              int32
-	Code            sql.NullString
+	ID              sql.NullInt32
+	Code            string
 	Description     sql.NullString
 	ConditionStatus sql.NullBool
 	CustomerID      int32
-	ConstraintID    int32
 }
 
 type PriceRule struct {
@@ -105,7 +103,9 @@ type PriceRule struct {
 
 type Product struct {
 	ID                    string
+	Name                  sql.NullString
 	Price                 sql.NullString
+	Vendor                sql.NullString
 	Sku                   sql.NullString
 	VaccineType           sql.NullBool
 	AuthorizedAges        sql.NullInt32
@@ -117,9 +117,9 @@ type Product struct {
 	Diluent               sql.NullString
 	Adjuvant              sql.NullString
 	AlternateName         sql.NullString
-	MinimumInterval       sql.NullString
-	AuthorizedInterval    sql.NullString
-	ExtendedInterval      sql.NullString
+	MinimumInterval       sql.NullInt32
+	AuthorizedInterval    sql.NullInt32
+	ExtendedInterval      sql.NullInt32
 	Background            sql.NullString
 	RegulatoryActions     sql.NullString
 	SafetyStatus          sql.NullString
@@ -136,18 +136,15 @@ type Product struct {
 type ProductConstraint struct {
 	ProductID    string
 	ConstraintID int32
-	Quantity     sql.NullInt32
 }
 
-type ProductVendor struct {
-	VendorID  int32
-	ProductID string
-}
-
-type Vendor struct {
-	ID      int32
-	Name    sql.NullString
-	Contact sql.NullString
-	Address sql.NullString
-	Country sql.NullString
+type StockItem struct {
+	ID         string
+	ClinicID   sql.NullString
+	Quantity   sql.NullInt32
+	Name       sql.NullString
+	Price      sql.NullString
+	LotNumber  sql.NullString
+	ExpiryDate sql.NullTime
+	ProductID  sql.NullString
 }
