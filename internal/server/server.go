@@ -6,9 +6,12 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	adminController "github.com/je117er/ocg-final-project/internal/admin/controller"
-	adminRepository "github.com/je117er/ocg-final-project/internal/admin/repository"
-	adminService "github.com/je117er/ocg-final-project/internal/admin/services"
+	clinicController "github.com/je117er/ocg-final-project/internal/clinic/controller"
+	clinicRepository "github.com/je117er/ocg-final-project/internal/clinic/repository"
+	clinicService "github.com/je117er/ocg-final-project/internal/clinic/services"
+	constraintController "github.com/je117er/ocg-final-project/internal/constraint/controller"
+	constraintRepositoty "github.com/je117er/ocg-final-project/internal/constraint/repository"
+	constraintService "github.com/je117er/ocg-final-project/internal/constraint/services"
 	customerController "github.com/je117er/ocg-final-project/internal/customer/controller"
 	customerRepository "github.com/je117er/ocg-final-project/internal/customer/repository"
 	customerService "github.com/je117er/ocg-final-project/internal/customer/services"
@@ -17,7 +20,12 @@ import (
 	productRepository "github.com/je117er/ocg-final-project/internal/product/repository"
 	productService "github.com/je117er/ocg-final-project/internal/product/services"
 	"github.com/je117er/ocg-final-project/internal/utils"
+	adminController "github.com/je117er/ocg-final-project/internal/admin/controller"
+	adminRepository "github.com/je117er/ocg-final-project/internal/admin/repository"
+	adminService "github.com/je117er/ocg-final-project/internal/admin/services"
 	"github.com/rs/cors"
+	"log"
+
 	"net/http"
 )
 
@@ -37,20 +45,25 @@ func InitServer() error {
 
 	productRepo := productRepository.NewProductRepository(DB)
 	customerRepo := customerRepository.NewCustomerRepository(DB)
+	constraintRepo := constraintRepositoty.NewConstraintRepository(DB)
+	clinicRepo := clinicRepository.NewClinicRepository(DB)
 	adminRepo := adminRepository.NewAdminRepository(DB)
 
-	productServ := productService.NewProductService(productRepo)
-	customerServ := customerService.NewCustomerService(customerRepo)
+	productService := productService.NewProductService(productRepo)
+	customerService := customerService.NewCustomerService(customerRepo)
+	constraintService := constraintService.NewConstraintService(constraintRepo)
+	clinicService := clinicService.NewClinicService(clinicRepo)
 	adminServ := adminService.NewAdminService(adminRepo)
 
 	r := mux.NewRouter()
+	productController.NewProductController(productService, ctx, r)
+	customerController.NewCustomerController(customerService, ctx, r)
+	constraintController.NewConstraintController(constraintService, ctx, r)
+	clinicController.NewClinicController(clinicService, ctx, r)
 	adminController.NewAdminController(adminServ, ctx, r)
-	customerController.NewCustomerController(customerServ, ctx, r)
-	productController.NewProductController(productServ, ctx, r)
 	s := r.PathPrefix("/admin").Subrouter()
 	s.Use(middleware.JWTVerify)
-	//productController.NewProductController(productServ, ctx, s)
-	//customerController.NewCustomerController(customerServ, ctx, r)
+
 
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
