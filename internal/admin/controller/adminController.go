@@ -19,6 +19,8 @@ type AdminController struct {
 	ctx          context.Context
 }
 
+var logger = utils.SugarLog()
+
 func NewAdminController(as admin.Service, ctx context.Context, r *mux.Router) {
 	controller := &AdminController{as, ctx}
 	r.Methods("POST").Path("/login").HandlerFunc(controller.Login)
@@ -28,6 +30,7 @@ func (as *AdminController) Login(w http.ResponseWriter, r *http.Request) {
 	user := &models.LoginRequest{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		utils.ResponseWithJson(w, http.StatusBadRequest, ResponseError{"Invalid Request"})
+		logger.Error(err)
 		return
 	}
 	resp := as.AdminService.Authenticate(as.ctx, user.Username, user.Password)

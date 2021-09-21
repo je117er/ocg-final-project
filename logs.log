@@ -1,3 +1,1 @@
-{"level":"info","ts":1632213008.315698,"msg":"Test log info"}
-{"level":"debug","ts":1632213008.3157837,"msg":"Test log debug"}
-{"level":"error","ts":1632213008.315808,"msg":"Test log err"}
+{"level":"[INFO]","time":"2021-09-21 22:43:04","caller":"server/server.go:27","message":"Start server ..."}

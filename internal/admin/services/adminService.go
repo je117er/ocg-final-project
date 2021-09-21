@@ -4,13 +4,10 @@ import (
 	"context"
 	"github.com/golang-jwt/jwt"
 	"github.com/je117er/ocg-final-project/internal/admin"
+	"github.com/je117er/ocg-final-project/internal/config"
 	"github.com/je117er/ocg-final-project/internal/models"
 	"golang.org/x/crypto/bcrypt"
 	"time"
-)
-
-var (
-	secretKey = "2fcc261931b586ef50afbce104b83b18f69672b8da5487fbee56779edda1b90d"
 )
 
 type AdminService struct {
@@ -52,6 +49,7 @@ func (as *AdminService) Authenticate(ctx context.Context, username string, hashe
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 
+	secretKey := config.Config("JWT_SECRET_KEY")
 	tokenString, err := token.SignedString([]byte(secretKey))
 	if err != nil {
 		return &models.LoginResponse{

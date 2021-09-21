@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/je117er/ocg-final-project/internal/models"
 )
 
@@ -66,9 +65,7 @@ func (p *ProductRepository) All(ctx context.Context) ([]models.Product, error) {
 	var products []models.Product
 	//query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product`
 	query := `select * from product`
-	fmt.Println("you are hereee")
 	rows, err := p.Conn.QueryContext(ctx, query)
-	fmt.Println("you are hereee")
 	if err != nil {
 		return nil, nil
 	}
