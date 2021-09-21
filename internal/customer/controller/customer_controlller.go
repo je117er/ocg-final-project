@@ -25,6 +25,12 @@ func NewCustomerController(service customer.Service, ctx context.Context, router
 	router.Methods(http.MethodGet).Path("/customer").PathPrefix("/{id}/cert").HandlerFunc(controller.GetCertByID)
 }
 
+func NewAdminCustomerController(service customer.Service, ctx context.Context, router *mux.Router) {
+	controller := CustomerController{service, ctx}
+	router.Methods(http.MethodGet).Path("/admin/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.GetCustomerByClinicId)
+	router.Methods(http.MethodPut).Path("/admin/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.UpdateCustomer)
+}
+
 func (controller *CustomerController) GetCustomerByEmail(w http.ResponseWriter, r *http.Request) {
 	email := r.URL.Query().Get("email")
 
@@ -75,4 +81,18 @@ func (controller *CustomerController) CreateCustomer(w http.ResponseWriter, r *h
 
 func (controller *CustomerController) GetCertByID(w http.ResponseWriter, r *http.Request) {
 
+}
+
+func (controller *CustomerController) GetCustomerByClinicId(w http.ResponseWriter, r *http.Request) {
+	clinicId := r.URL.Query().Get("clinicId")
+
+	c, err := controller.CustomerService.GetAllByClinicID(controller.ctx, clinicId)
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+
+		return
+	}
+
+	utils.ResponseWithJson(w, http.StatusOK, c)
 }

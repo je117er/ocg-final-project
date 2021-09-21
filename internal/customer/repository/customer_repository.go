@@ -39,6 +39,33 @@ func (repository *CustomerRepository) getOne(ctx context.Context, query string, 
 	return customerModel, nil
 }
 
+func (repository *CustomerRepository) fetch(ctx context.Context, query string, args ...interface{}) ([]*models.Customer, error) {
+	rows, err := repository.conn.QueryContext(ctx, query, args...)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	result := make([]*models.Customer, 0)
+	for rows.Next() {
+		customerModel := new(models.Customer)
+		err := rows.Scan(&customerModel.ID, &customerModel.Email, &customerModel.Name, &customerModel.Address,
+			&customerModel.Gender, &customerModel.Dob, &customerModel.PhoneNumber, &customerModel.InsuranceNumber,
+			&customerModel.City, &customerModel.District, &customerModel.Commune, &customerModel.Ethnicity, &customerModel.Nationality)
+		if err != nil {
+			logger.Error(err)
+			return nil, err
+		}
+
+		result = append(result, customerModel)
+	}
+
+	return result, nil
+
+}
+
 func (repository *CustomerRepository) GetByEmail(ctx context.Context, email string) (*models.Customer, error) {
 	query := `SELECT c.id, c.email, c.name, c.address, c.gender, c.dob, c.phone_number, c.insurance_number, 
 					c.city, c.district, c.commune, c.ethnicity, c.nationality 
@@ -71,7 +98,6 @@ func (repository *CustomerRepository) Update(ctx context.Context, customer model
 		logger.Error(err)
 		return nil, err
 	}
-	logger.Debug(res)
 	_, err = res.RowsAffected()
 	if err != nil {
 		logger.Error(err)
@@ -124,4 +150,17 @@ func (repository *CustomerRepository) Save(ctx context.Context, customer models.
 
 func (repository *CustomerRepository) GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error) {
 	return nil, nil
+}
+
+func (repository *CustomerRepository) GetAllByClinicID(ctx context.Context, id string) ([]*models.Customer, error) {
+	query := `select *
+			from customer
+			where id in (
+				select customer_id
+				from booking
+				where daily_capacity_id in
+					  (select id from session_capacity where clinic_id = ?)
+			)`
+
+	return repository.fetch(ctx, query, id)
 }

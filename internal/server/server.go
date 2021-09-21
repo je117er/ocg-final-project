@@ -63,6 +63,8 @@ func InitServer() error {
 	constraintController.NewConstraintController(constraintService, ctx, r)
 	clinicController.NewClinicController(clinicService, ctx, r)
 
+	customerController.NewAdminCustomerController(customerService, ctx, r)
+
 	// cors.Default() setup the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
