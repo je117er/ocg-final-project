@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/je117er/ocg-final-project/internal/product/controllers"
 	"github.com/je117er/ocg-final-project/internal/product/repository"
@@ -30,6 +31,8 @@ func InitServer() error {
 
 	productRepo := repository.NewProductRepository(DB)
 	serviceRepo := services.NewProductService(productRepo)
+
+	adminRepo := admin
 
 	r := mux.NewRouter()
 	controllers.NewProductController(serviceRepo, ctx, r)

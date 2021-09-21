@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/je117er/ocg-final-project/internal/server"
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"log"
@@ -13,5 +12,7 @@ func main() {
 	sugarLogger.Debug("Test log debug")
 	sugarLogger.Error("Test log err")
 
+
 	log.Fatal(server.InitServer())
+
 }
