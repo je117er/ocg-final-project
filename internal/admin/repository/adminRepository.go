@@ -21,7 +21,7 @@ func (a *AdminRepository) Fetch(ctx context.Context, query string, args... inter
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	admin := &models.Admin{}
-	if err := row.Scan(&admin); err != nil {
+	if err := row.Scan(&admin.ID, &admin.Username, &admin.HashedPassword); err != nil {
 		return nil, err
 	}
 
@@ -29,7 +29,7 @@ func (a *AdminRepository) Fetch(ctx context.Context, query string, args... inter
 }
 
 func (a *AdminRepository) ByUsername(ctx context.Context, username string) (*models.Admin, error) {
-	query := `SELECT * WHERE username = ?`
+	query := `SELECT * FROM admin WHERE username = ?`
 	res, err := a.Fetch(ctx, query, username)
 	if err != nil {
 		return nil, err

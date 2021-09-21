@@ -6,5 +6,7 @@ import (
 )
 
 type Service interface {
-	ByUsername(ctx context.Context, username string) (*models.Admin, error)
+	Authenticate(ctx context.Context, username string) (*models.Admin, error)
 }
+
+

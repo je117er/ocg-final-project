@@ -8,7 +8,6 @@ import (
 
 type ProductService struct {
 	productRepo product.Repository
-	//ctx context.Context
 }
 
 func NewProductService(productRepo product.Repository) product.Service {

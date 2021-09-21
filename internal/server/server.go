@@ -6,9 +6,10 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	"github.com/je117er/ocg-final-project/internal/product/controllers"
-	"github.com/je117er/ocg-final-project/internal/product/repository"
-	"github.com/je117er/ocg-final-project/internal/product/services"
+	adminRepos "github.com/je117er/ocg-final-project/internal/admin/repository"
+	productController "github.com/je117er/ocg-final-project/internal/product/controllers"
+	productRepos "github.com/je117er/ocg-final-project/internal/product/repository"
+	productServices "github.com/je117er/ocg-final-project/internal/product/services"
 	"github.com/rs/cors"
 
 	"log"
@@ -29,15 +30,21 @@ func InitServer() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	productRepo := repository.NewProductRepository(DB)
-	serviceRepo := services.NewProductService(productRepo)
+	productRepo := productRepos.NewProductRepository(DB)
+	serviceRepo := productServices.NewProductService(productRepo)
 
-	adminRepo := admin
+	adminRepo := adminRepos.NewAdminRepository(DB)
+	hp, err := adminRepo.ByUsername(ctx, "tfs03admin")
+	if err != nil {
+		log.Print(err)
+	}
+	log.Println(hp)
+
 
 	r := mux.NewRouter()
-	controllers.NewProductController(serviceRepo, ctx, r)
+	productController.NewProductController(serviceRepo, ctx, r)
 
-	// cors.Default() setup the middleware with default options being
+	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
 	handler := cors.Default().Handler(r)
