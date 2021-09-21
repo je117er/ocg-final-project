@@ -9,10 +9,6 @@ import (
 	"net/http"
 )
 
-type ResponseError struct {
-	Message string `json:"message"`
-}
-
 type ProductController struct {
 	ProductService product.Service
 	ctx            context.Context
@@ -27,7 +23,7 @@ func NewProductController(ps product.Service, ctx context.Context, r *mux.Router
 func (c *ProductController) GetProducts(w http.ResponseWriter, r *http.Request) {
 	results, err := c.ProductService.All(c.ctx)
 	if err != nil {
-		utils.ResponseWithJson(w, http.StatusInternalServerError, ResponseError{err.Error()})
+		utils.ResponseWithJson(w, http.StatusInternalServerError, utils.ResponseError{Message: err.Error()})
 		return
 	}
 	var responses []*models.ProductResponse
@@ -41,7 +37,7 @@ func (c *ProductController) GetProductByID(w http.ResponseWriter, r *http.Reques
 	id := mux.Vars(r)["id"]
 	result, err := c.ProductService.ByID(c.ctx, id)
 	if err != nil {
-		utils.ResponseWithJson(w, http.StatusInternalServerError, ResponseError{"Internal Server Error"})
+		utils.ResponseWithJson(w, http.StatusInternalServerError, utils.ResponseError{Message: "Internal Server Error"})
 		return
 	}
 
