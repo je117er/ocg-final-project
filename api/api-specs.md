@@ -22,7 +22,7 @@
 * POST admin/login
 
 ### Customer
-* GET customer/{id}
+* GET customer/email=?
 * PUT customer/{id}
 * GET constraints
 * POST /checkout

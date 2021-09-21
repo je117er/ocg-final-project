@@ -1,6 +1,6 @@
 CREATE TABLE `product`
 (
-    `id`                      binary(16) PRIMARY KEY,
+    `id`                      varchar(50) PRIMARY KEY,
     `name`                    varchar(255),
     `price`                   decimal,
     `vendor`                  varchar(255),
@@ -69,14 +69,14 @@ CREATE TABLE `constraint`
 
 CREATE TABLE `product_constraint`
 (
-    `product_id`    binary(16) NOT NULL,
+    `product_id`    varchar(50) NOT NULL,
     `constraint_id` int NOT NULL,
     PRIMARY KEY (`product_id`, `constraint_id`)
 );
 
 CREATE TABLE `clinic`
 (
-    `id`       binary(16) PRIMARY KEY,
+    `id`       varchar(50) PRIMARY KEY,
     `name`     varchar(255),
     `address`  varchar(255),
     `contact`  varchar(255),
@@ -87,7 +87,7 @@ CREATE TABLE `clinic`
 CREATE TABLE `session_capacity`
 (
     `id`                 int PRIMARY KEY AUTO_INCREMENT,
-    `clinic_id`          binary(16),
+    `clinic_id`          varchar(50),
     `capacity`           int,
     `type`              tinyint,
     `status` tinyint,
@@ -96,14 +96,14 @@ CREATE TABLE `session_capacity`
 
 CREATE TABLE `stock_item`
 (
-    `id`          binary(16) PRIMARY KEY NOT NULL,
-    `clinic_id`   binary(16),
+    `id`          varchar(50) PRIMARY KEY NOT NULL,
+    `clinic_id`   varchar(50),
     `quantity`    int,
     `name`        varchar(255),
     `price`       decimal,
     `lot_number`  varchar(10),
     `expiry_date` date,
-    `product_id`  binary(16)
+    `product_id`  varchar(50)
 );
 
 CREATE TABLE `booking`
@@ -123,7 +123,7 @@ CREATE TABLE `booking`
     `daily_capacity_id`   int,
     `total_bill`          decimal,
     `payment_status`      tinyint(1),
-    `stock_item_id`       binary(16),
+    `stock_item_id`       varchar(50),
     `discount_id`         int NOT NULL,
     PRIMARY KEY (`id`)
 );
@@ -131,7 +131,7 @@ CREATE TABLE `booking`
 CREATE TABLE `price_rule`
 (
     `id`                int AUTO_INCREMENT,
-    `product_id`        binary(16) NOT NULL,
+    `product_id`        varchar(50) NOT NULL,
     `value`             decimal,
     `value_type`        tinyint,
     `once_per_customer` tinyint(1),
