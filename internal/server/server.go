@@ -6,6 +6,9 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+	adminController "github.com/je117er/ocg-final-project/internal/admin/controller"
+	adminRepository "github.com/je117er/ocg-final-project/internal/admin/repository"
+	adminService "github.com/je117er/ocg-final-project/internal/admin/services"
 	clinicController "github.com/je117er/ocg-final-project/internal/clinic/controller"
 	clinicRepository "github.com/je117er/ocg-final-project/internal/clinic/repository"
 	clinicService "github.com/je117er/ocg-final-project/internal/clinic/services"
@@ -20,11 +23,7 @@ import (
 	productRepository "github.com/je117er/ocg-final-project/internal/product/repository"
 	productService "github.com/je117er/ocg-final-project/internal/product/services"
 	"github.com/je117er/ocg-final-project/internal/utils"
-	adminController "github.com/je117er/ocg-final-project/internal/admin/controller"
-	adminRepository "github.com/je117er/ocg-final-project/internal/admin/repository"
-	adminService "github.com/je117er/ocg-final-project/internal/admin/services"
 	"github.com/rs/cors"
-	"log"
 
 	"net/http"
 )
