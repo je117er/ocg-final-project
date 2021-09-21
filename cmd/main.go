@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/je117er/ocg-final-project/internal/server"
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"go.uber.org/zap"
@@ -17,5 +16,7 @@ func init() {
 func main() {
 	logger.Info("Start application...")
 
+
 	log.Fatal(server.InitServer())
+
 }

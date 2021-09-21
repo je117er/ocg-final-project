@@ -7,5 +7,6 @@ import (
 
 type Repository interface {
 	ByID(ctx context.Context, id string) (*models.Product, error)
+	Fetch(ctx context.Context, query string, args ...interface{}) (*models.Product, error)
 	All(ctx context.Context) ([]models.Product, error)
 }
