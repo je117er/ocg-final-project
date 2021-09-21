@@ -6,7 +6,5 @@ import (
 )
 
 type Service interface {
-	Authenticate(ctx context.Context, username string) (*models.Admin, error)
+	Authenticate(ctx context.Context, username string, hashedPassword string) *models.LoginResponse
 }
-
-
