@@ -34,7 +34,7 @@ CREATE TABLE `product`
 CREATE TABLE `customer`
 (
     `id`               int PRIMARY KEY AUTO_INCREMENT,
-    `email`            varchar(100),
+    `email`            varchar(100) unique ,
     `name`             varchar(100),
     `address`          varchar(255),
     `gender`           varchar(10),
