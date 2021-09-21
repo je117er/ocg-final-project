@@ -1,4 +1,3 @@
-{"level":"info","ts":1632185437.6524734,"msg":"Test log info"}
-{"level":"debug","ts":1632185437.6525366,"msg":"Test log debug"}
-{"level":"error","ts":1632185437.6525648,"msg":"Test log err"}
-{"level":"error","ts":1632185437.652618,"msg":"Test log err"}
+{"level":"info","ts":1632210413.8413332,"msg":"Test log info"}
+{"level":"debug","ts":1632210413.8413641,"msg":"Test log debug"}
+{"level":"error","ts":1632210413.841372,"msg":"Test log err"}

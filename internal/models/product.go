@@ -1,8 +1,8 @@
 package models
 
 import (
-	"context"
 	"database/sql"
+	"time"
 )
 
 type Product struct {
@@ -37,11 +37,68 @@ type Product struct {
 	ExpiryDate            sql.NullTime
 }
 
-type ProductRepository interface {
-	ByID(ctx context.Context, id string) (Product, error)
-	All(ctx context.Context) ([]Product, error)
+type ProductResponse struct {
+	ID                    string
+	Name                  string
+	Price                 string
+	Vendor                string
+	VaccineType           string
+	AuthorizedAges        int32
+	Dose                  string
+	AntigenNature         string
+	RouteOfAdministration string
+	StorageRequirements   string
+	AvailableFormats      string
+	Diluent               string
+	Adjuvant              string
+	AlternateName         string
+	MinimumInterval       int32
+	ImmunizationSchedule  int32
+	AuthorizedInterval    int32
+	ExtendedInterval      int32
+	Background            string
+	RegulatoryActions     string
+	SafetyStatus          string
+	AuthorizationStatus   bool
+	Trials                string
+	Distribution          string
+	Funding               string
+	Slug                  string
+	Image                 string
+	LotNumber             string
+	ExpiryDate            time.Time
 }
 
-type ProductService interface {
-	ByID(ctx context.Context, id string) (Product, error)
+func (p Product) ModelToResponse() *ProductResponse {
+	return &ProductResponse{
+		ID:                    p.ID,
+		Name:                  p.Name.String,
+		Price:                 p.Price.String,
+		Vendor:                p.Vendor.String,
+		VaccineType:           p.VaccineType.String,
+		AuthorizedAges:        p.AuthorizedAges.Int32,
+		Dose:                  p.Dose.String,
+		AntigenNature:         p.AntigenNature.String,
+		RouteOfAdministration: p.RouteOfAdministration.String,
+		StorageRequirements:   p.StorageRequirements.String,
+		AvailableFormats:      p.AvailableFormats.String,
+		Diluent:               p.Diluent.String,
+		Adjuvant:              p.Adjuvant.String,
+		AlternateName:         p.AlternateName.String,
+		MinimumInterval:       p.MinimumInterval.Int32,
+		ImmunizationSchedule:  p.ImmunizationSchedule.Int32,
+		AuthorizedInterval:    p.AuthorizedInterval.Int32,
+		ExtendedInterval:      p.ExtendedInterval.Int32,
+		Background:            p.Background.String,
+		RegulatoryActions:     p.RegulatoryActions.String,
+		SafetyStatus:          p.SafetyStatus.String,
+		AuthorizationStatus:   p.AuthorizationStatus.Bool,
+		Trials:                p.Trials.String,
+		Distribution:          p.Distribution.String,
+		Funding:               p.Funding.String,
+		Slug:                  p.Slug.String,
+		Image:                 p.Image.String,
+		LotNumber:             p.LotNumber.String,
+		ExpiryDate:            p.ExpiryDate.Time,
+	}
 }
