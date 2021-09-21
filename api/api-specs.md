@@ -2,35 +2,27 @@
 
 ## Product
 
-- [ ] GET /products
+- [x] GET /products
 
-- [ ] GET /product/{id}
+- [x] GET /product/{id}
 
 ## Customer
 
 ### Admin
 
-- [ ] GET admin/customers
+- [x] GET admin/customers
 
-- [ ] GET admin/customer/{id}
+- [x] GET admin/customer/{id}
 
-- [ ] GET admin/customer/{id}/personalInfo
-
-- [ ] GET admin/customer/{id}/medicalHistory -> admin/medicalHistory?customerId=10
+- [x] GET admin/customer/{id}/medicalHistory -> admin/medicalHistory?customerId=10
 
 - [ ] GET admin/customer/{id}/vaccination
 
-- [ ] GET admin/customer/{id}/order -> admin/booking?customerId=10
-
-- [ ] PUT admin/customer/{id}/personalInfo
-
-- [ ] PUT admin/customer/{id}/medicalHistory -> admin/medicalHistory?customerId=10
+- [x] PUT admin/customer
 
 - [ ] PUT admin/customer/{id}/vaccination
 
-- [ ] PUT admin/customer/{id}/order -> admin/booking?customerId=10
-
-- [ ] POST admin/login
+- [x] POST admin/login
 
 ### Customer
 

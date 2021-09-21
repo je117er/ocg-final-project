@@ -8,6 +8,7 @@ import (
 	"github.com/je117er/ocg-final-project/internal/models"
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"net/http"
+	"strconv"
 )
 
 type CustomerController struct {
@@ -29,6 +30,9 @@ func NewAdminCustomerController(service customer.Service, ctx context.Context, r
 	controller := CustomerController{service, ctx}
 	router.Methods(http.MethodGet).Path("/admin/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.GetCustomerByClinicId)
 	router.Methods(http.MethodPut).Path("/admin/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.UpdateCustomer)
+	router.Methods(http.MethodGet).Path("/admin/{id:[0-9]+}").HandlerFunc(controller.GetCustomerByID)
+	router.Methods(http.MethodPut).Path("/admin/customer").HandlerFunc(controller.UpdateCustomer)
+
 }
 
 func (controller *CustomerController) GetCustomerByEmail(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +47,32 @@ func (controller *CustomerController) GetCustomerByEmail(w http.ResponseWriter, 
 	}
 
 	utils.ResponseWithJson(w, http.StatusOK, c)
+}
+
+func (controller *CustomerController) GetCustomers(w http.ResponseWriter, r *http.Request) {
+	c, err := controller.CustomerService.GetAll(controller.ctx)
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		return
+	}
+	utils.ResponseWithJson(w, http.StatusOK, c)
+}
+
+func (controller *CustomerController) GetCustomerByID(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusBadRequest, models.ResponseError{Message: err.Error()})
+		return
+	}
+
+	cust, err := controller.CustomerService.GetByID(controller.ctx, id)
+	if err != nil {
+		utils.ResponseWithJson(w, http.StatusNotFound, models.ResponseError{Message: err.Error()})
+		return
+	}
+	utils.ResponseWithJson(w, http.StatusOK, cust)
 }
 
 func (controller *CustomerController) UpdateCustomer(w http.ResponseWriter, r *http.Request) {

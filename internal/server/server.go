@@ -12,6 +12,9 @@ import (
 	clinicController "github.com/je117er/ocg-final-project/internal/clinic/controller"
 	clinicRepository "github.com/je117er/ocg-final-project/internal/clinic/repository"
 	clinicService "github.com/je117er/ocg-final-project/internal/clinic/services"
+	conditionController "github.com/je117er/ocg-final-project/internal/condition/controller"
+	conditionRepository "github.com/je117er/ocg-final-project/internal/condition/repository"
+	conditionService "github.com/je117er/ocg-final-project/internal/condition/services"
 	constraintController "github.com/je117er/ocg-final-project/internal/constraint/controller"
 	constraintRepositoty "github.com/je117er/ocg-final-project/internal/constraint/repository"
 	constraintService "github.com/je117er/ocg-final-project/internal/constraint/services"
@@ -46,12 +49,14 @@ func InitServer() error {
 	constraintRepo := constraintRepositoty.NewConstraintRepository(DB)
 	clinicRepo := clinicRepository.NewClinicRepository(DB)
 	adminRepo := adminRepository.NewAdminRepository(DB)
+	conditionRepo := conditionRepository.NewConditionRepository(DB)
 
 	productService := productService.NewProductService(productRepo)
 	customerService := customerService.NewCustomerService(customerRepo)
 	constraintService := constraintService.NewConstraintService(constraintRepo)
 	clinicService := clinicService.NewClinicService(clinicRepo)
 	adminServ := adminService.NewAdminService(adminRepo)
+	conditionServ := conditionService.NewConditionService(conditionRepo)
 
 	r := mux.NewRouter()
 	productController.NewProductController(productService, ctx, r)
@@ -59,6 +64,7 @@ func InitServer() error {
 	constraintController.NewConstraintController(constraintService, ctx, r)
 	clinicController.NewClinicController(clinicService, ctx, r)
 	adminController.NewAdminController(adminServ, ctx, r)
+	conditionController.NewConditionController(conditionServ, ctx, r)
 	s := r.PathPrefix("/admin").Subrouter()
 	s.Use(middleware.JWTVerify)
 

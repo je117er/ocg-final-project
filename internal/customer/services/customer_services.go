@@ -29,6 +29,27 @@ func (customerService *CustomerService) GetByEmail(ctx context.Context, email st
 	return res.Entity2Response(), nil
 }
 
+func (customerService *CustomerService) GetByID(ctx context.Context, id int) (*models.CustomerResponse, error) {
+	res, err := customerService.customerRepository.GetByID(ctx, id)
+	if err != nil {
+		return nil, errors.Errorf("Customer %d doesn't exist", id)
+	}
+
+	return res.Entity2Response(), nil
+}
+
+func (customerService *CustomerService) GetAll(ctx context.Context) ([]*models.CustomerResponse, error) {
+	res, err := customerService.customerRepository.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	responses := make([]*models.CustomerResponse, 0)
+	for _, v := range res {
+		responses = append(responses, v.Entity2Response())
+	}
+	return responses, nil
+}
+
 func (customerService *CustomerService) UpdateCustomer(ctx context.Context, customerRequest models.CustomerRequest) (*models.CustomerResponse, error) {
 	_, err := customerService.customerRepository.GetByID(ctx, customerRequest.ID)
 	if err != nil {
