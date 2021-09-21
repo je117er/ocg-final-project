@@ -46,3 +46,82 @@ func (repository *CustomerRepository) GetByEmail(ctx context.Context, email stri
 				WHERE c.email = ?`
 	return repository.getOne(ctx, query, email)
 }
+
+func (repository *CustomerRepository) GetByID(ctx context.Context, id int) (*models.Customer, error) {
+	query := `SELECT c.id, c.email, c.name, c.address, c.gender, c.dob, c.phone_number, c.insurance_number, 
+					c.city, c.district, c.commune, c.ethnicity, c.nationality 
+				FROM customer AS c 
+				WHERE c.id = ?`
+	return repository.getOne(ctx, query, id)
+}
+
+func (repository *CustomerRepository) Update(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error) {
+	query := `UPDATE customer SET email = ?, name = ?, address = ?, gender = ?, dob = ?, phone_number = ?,
+				insurance_number = ?, city = ?, district = ?, commune = ?, ethnicity = ?, nationality = ?
+				where id = ?`
+	stmt, err := repository.conn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, nil
+	}
+
+	res, err := stmt.ExecContext(ctx, customer.Email, customer.Name, customer.Address, customer.Gender, customer.Dob,
+		customer.PhoneNumber, customer.InsuranceNumber, customer.City, customer.District, customer.Commune, customer.Ethnicity,
+		customer.Nationality, customer.ID)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+	logger.Debug(res)
+	_, err = res.RowsAffected()
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	data, err := repository.GetByID(ctx, customer.ID)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	return data, nil
+
+}
+
+func (repository *CustomerRepository) Save(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error) {
+	query := `INSERT INTO customer(email, name, address, gender, dob, phone_number, insurance_number, city, district, commune, ethnicity, nationality) 
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	stmt, err := repository.conn.PrepareContext(ctx, query)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	res, err := stmt.ExecContext(ctx, customer.Email, customer.Name, customer.Address, customer.Gender, customer.Dob,
+		customer.PhoneNumber, customer.InsuranceNumber, customer.City, customer.District, customer.Commune, customer.Ethnicity,
+		customer.Nationality)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	customer.ID = int(id)
+	data, err := repository.GetByID(ctx, customer.ID)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	return data, nil
+
+}
+
+func (repository *CustomerRepository) GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error) {
+	return nil, nil
+}

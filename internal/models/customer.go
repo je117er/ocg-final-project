@@ -6,7 +6,7 @@ import (
 )
 
 type Customer struct {
-	ID              int32
+	ID              int
 	Email           sql.NullString
 	Name            sql.NullString
 	Address         sql.NullString
@@ -22,19 +22,35 @@ type Customer struct {
 }
 
 type CustomerResponse struct {
-	ID              int32
-	Email           string
-	Name            string
-	Address         string
-	Gender          string
-	Dob             time.Time
-	PhoneNumber     string
-	InsuranceNumber string
-	City            string
-	District        string
-	Commune         string
-	Ethnicity       string
-	Nationality     string
+	ID              int       `json:"id"`
+	Email           string    `json:"email"`
+	Name            string    `json:"name"`
+	Address         string    `json:"address"`
+	Gender          string    `json:"gender"`
+	Dob             time.Time `json:"dob"`
+	PhoneNumber     string    `json:"phoneNumber"`
+	InsuranceNumber string    `json:"insuranceNumber"`
+	City            string    `json:"city"`
+	District        string    `json:"district"`
+	Commune         string    `json:"commune"`
+	Ethnicity       string    `json:"ethnicity"`
+	Nationality     string    `json:"nationality"`
+}
+
+type CustomerRequest struct {
+	ID              int       `json:"id"`
+	Email           string    `json:"email"`
+	Name            string    `json:"name"`
+	Address         string    `json:"address"`
+	Gender          string    `json:"gender"`
+	Dob             time.Time `json:"dob"`
+	PhoneNumber     string    `json:"phoneNumber"`
+	InsuranceNumber string    `json:"insuranceNumber"`
+	City            string    `json:"city"`
+	District        string    `json:"district"`
+	Commune         string    `json:"commune"`
+	Ethnicity       string    `json:"ethnicity"`
+	Nationality     string    `json:"nationality"`
 }
 
 func (customer Customer) Entity2Response() *CustomerResponse {
