@@ -8,6 +8,7 @@ import (
 type Repository interface {
 	GetByEmail(ctx context.Context, email string) (*models.Customer, error)
 	GetByID(ctx context.Context, id int) (*models.Customer, error)
+	GetAll(ctx context.Context) ([]*models.Customer, error)
 	Save(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error)
 	Update(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error)
 	GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error)

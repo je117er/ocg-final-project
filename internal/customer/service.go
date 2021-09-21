@@ -11,4 +11,6 @@ type Service interface {
 	CreateCustomer(ctx context.Context, customer models.CustomerRequest) (*models.CustomerResponse, error)
 	GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error)
 	GetAllByClinicID(ctx context.Context, id string) ([]*models.CustomerResponse, error)
+	GetByID(ctx context.Context, id int) (*models.CustomerResponse, error)
+	GetAll(ctx context.Context) ([]*models.CustomerResponse, error)
 }
