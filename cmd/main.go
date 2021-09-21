@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
@@ -11,6 +12,7 @@ import (
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -28,11 +30,14 @@ func main() {
 	fmt.Println("you")
 	sugarLogger.Error("Test log err")
 
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	productRepo := repository.NewProductRepository(DB)
 	serviceRepo := services.NewProductService(productRepo)
 
 	r := mux.NewRouter()
-	controllers.NewProductController(serviceRepo, r)
+	controllers.NewProductController(serviceRepo, ctx, r)
 
 	sugarLogger.Fatal(http.ListenAndServe(":8000", r))
 }

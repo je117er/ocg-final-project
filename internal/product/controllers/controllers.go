@@ -15,10 +15,11 @@ type ResponseError struct {
 
 type ProductController struct {
 	ProductService product.Service
+	ctx            context.Context
 }
 
-func NewProductController(ps product.Service, r *mux.Router) {
-	controller := &ProductController{ps}
+func NewProductController(ps product.Service, ctx context.Context, r *mux.Router) {
+	controller := &ProductController{ps, ctx}
 	r.Methods("GET").Path("/product/{id}").HandlerFunc(controller.GetProductByID)
 	r.Methods("GET").Path("/products").HandlerFunc(controller.GetProducts)
 }
@@ -56,8 +57,8 @@ type ProductResponse struct {
 }
 
 func (c *ProductController) GetProducts(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-	results, err := c.ProductService.All(ctx)
+	//ctx := context.Background()
+	results, err := c.ProductService.All(c.ctx)
 	if err != nil {
 		utils.ResponseWithJson(w, http.StatusInternalServerError, ResponseError{err.Error()})
 		return
@@ -65,35 +66,35 @@ func (c *ProductController) GetProducts(w http.ResponseWriter, r *http.Request) 
 	var responses []ProductResponse
 	for _, result := range results {
 		responses = append(responses, ProductResponse{
-			ID                  : result.ID,
-			Name: result.Name.String,
-			Price: result.Price.String,
-			Vendor: result.Vendor.String,
-			VaccineType: result.VaccineType.String,
-			AuthorizedAges        : result.AuthorizedAges.Int32,
-			Dose                  : result.Dose.String,
-			AntigenNature         : result.AntigenNature.String,
-			RouteOfAdministration : result.RouteOfAdministration.String,
-			StorageRequirements   : result.StorageRequirements.String,
-			AvailableFormats      : result.AvailableFormats.String,
-			Diluent               : result.Diluent.String,
-			Adjuvant              : result.Adjuvant.String,
-			AlternateName         : result.AlternateName.String,
-			MinimumInterval       : result.MinimumInterval.Int32,
-			ImmunizationSchedule  : result.ImmunizationSchedule.Int32,
-			AuthorizedInterval    : result.AuthorizedInterval.Int32,
-			ExtendedInterval      : result.ExtendedInterval.Int32,
-			Background            : result.Background.String,
-			RegulatoryActions     : result.RegulatoryActions.String,
-			SafetyStatus          : result.SafetyStatus.String,
-			AuthorizationStatus   : result.AuthorizationStatus.Bool,
-			Trials                : result.Trials.String,
-			Distribution          : result.Distribution.String,
-			Funding               : result.Funding.String,
-			Slug                  : result.Slug.String,
-			Image                 : result.Image.String,
-			LotNumber             : result.LotNumber.String,
-			ExpiryDate            : result.ExpiryDate.Time,
+			ID:                    result.ID,
+			Name:                  result.Name.String,
+			Price:                 result.Price.String,
+			Vendor:                result.Vendor.String,
+			VaccineType:           result.VaccineType.String,
+			AuthorizedAges:        result.AuthorizedAges.Int32,
+			Dose:                  result.Dose.String,
+			AntigenNature:         result.AntigenNature.String,
+			RouteOfAdministration: result.RouteOfAdministration.String,
+			StorageRequirements:   result.StorageRequirements.String,
+			AvailableFormats:      result.AvailableFormats.String,
+			Diluent:               result.Diluent.String,
+			Adjuvant:              result.Adjuvant.String,
+			AlternateName:         result.AlternateName.String,
+			MinimumInterval:       result.MinimumInterval.Int32,
+			ImmunizationSchedule:  result.ImmunizationSchedule.Int32,
+			AuthorizedInterval:    result.AuthorizedInterval.Int32,
+			ExtendedInterval:      result.ExtendedInterval.Int32,
+			Background:            result.Background.String,
+			RegulatoryActions:     result.RegulatoryActions.String,
+			SafetyStatus:          result.SafetyStatus.String,
+			AuthorizationStatus:   result.AuthorizationStatus.Bool,
+			Trials:                result.Trials.String,
+			Distribution:          result.Distribution.String,
+			Funding:               result.Funding.String,
+			Slug:                  result.Slug.String,
+			Image:                 result.Image.String,
+			LotNumber:             result.LotNumber.String,
+			ExpiryDate:            result.ExpiryDate.Time,
 		})
 	}
 	utils.ResponseWithJson(w, http.StatusOK, responses)
@@ -101,44 +102,43 @@ func (c *ProductController) GetProducts(w http.ResponseWriter, r *http.Request) 
 
 func (c *ProductController) GetProductByID(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
-	ctx := context.Background()
-	result, err := c.ProductService.ByID(ctx, id)
+	//ctx := context.Background()
+	result, err := c.ProductService.ByID(c.ctx, id)
 	if err != nil {
 		utils.ResponseWithJson(w, http.StatusInternalServerError, ResponseError{"Internal Server Error"})
 		return
 	}
 
 	response := &ProductResponse{
-		ID                  : result.ID,
-		Name: result.Name.String,
-		Price: result.Price.String,
-		Vendor: result.Vendor.String,
-		VaccineType: result.VaccineType.String,
-		AuthorizedAges        : result.AuthorizedAges.Int32,
-		Dose                  : result.Dose.String,
-		AntigenNature         : result.AntigenNature.String,
-		RouteOfAdministration : result.RouteOfAdministration.String,
-		StorageRequirements   : result.StorageRequirements.String,
-		AvailableFormats      : result.AvailableFormats.String,
-		Diluent               : result.Diluent.String,
-		Adjuvant              : result.Adjuvant.String,
-		AlternateName         : result.AlternateName.String,
-		MinimumInterval       : result.MinimumInterval.Int32,
-		ImmunizationSchedule  : result.ImmunizationSchedule.Int32,
-		AuthorizedInterval    : result.AuthorizedInterval.Int32,
-		ExtendedInterval      : result.ExtendedInterval.Int32,
-		Background            : result.Background.String,
-		RegulatoryActions     : result.RegulatoryActions.String,
-		SafetyStatus          : result.SafetyStatus.String,
-		AuthorizationStatus   : result.AuthorizationStatus.Bool,
-		Trials                : result.Trials.String,
-		Distribution          : result.Distribution.String,
-		Funding               : result.Funding.String,
-		Slug                  : result.Slug.String,
-		Image                 : result.Image.String,
-		LotNumber             : result.LotNumber.String,
-		ExpiryDate            : result.ExpiryDate.Time,
+		ID:                    result.ID,
+		Name:                  result.Name.String,
+		Price:                 result.Price.String,
+		Vendor:                result.Vendor.String,
+		VaccineType:           result.VaccineType.String,
+		AuthorizedAges:        result.AuthorizedAges.Int32,
+		Dose:                  result.Dose.String,
+		AntigenNature:         result.AntigenNature.String,
+		RouteOfAdministration: result.RouteOfAdministration.String,
+		StorageRequirements:   result.StorageRequirements.String,
+		AvailableFormats:      result.AvailableFormats.String,
+		Diluent:               result.Diluent.String,
+		Adjuvant:              result.Adjuvant.String,
+		AlternateName:         result.AlternateName.String,
+		MinimumInterval:       result.MinimumInterval.Int32,
+		ImmunizationSchedule:  result.ImmunizationSchedule.Int32,
+		AuthorizedInterval:    result.AuthorizedInterval.Int32,
+		ExtendedInterval:      result.ExtendedInterval.Int32,
+		Background:            result.Background.String,
+		RegulatoryActions:     result.RegulatoryActions.String,
+		SafetyStatus:          result.SafetyStatus.String,
+		AuthorizationStatus:   result.AuthorizationStatus.Bool,
+		Trials:                result.Trials.String,
+		Distribution:          result.Distribution.String,
+		Funding:               result.Funding.String,
+		Slug:                  result.Slug.String,
+		Image:                 result.Image.String,
+		LotNumber:             result.LotNumber.String,
+		ExpiryDate:            result.ExpiryDate.Time,
 	}
 	utils.ResponseWithJson(w, http.StatusOK, response)
 }
-
