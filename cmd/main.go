@@ -4,14 +4,18 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/je117er/ocg-final-project/internal/server"
 	"github.com/je117er/ocg-final-project/internal/utils"
+	"go.uber.org/zap"
 	"log"
 )
 
+var logger *zap.SugaredLogger
+
+func init() {
+	logger = utils.SugarLog()
+}
+
 func main() {
-	sugarLogger := utils.SugarLog()
-	sugarLogger.Info("Test log info")
-	sugarLogger.Debug("Test log debug")
-	sugarLogger.Error("Test log err")
+	logger.Info("Start application...")
 
 	log.Fatal(server.InitServer())
 }
