@@ -4,51 +4,49 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	adminRepos "github.com/je117er/ocg-final-project/internal/admin/repository"
+	customerController "github.com/je117er/ocg-final-project/internal/customer/controller"
+	customerRepository "github.com/je117er/ocg-final-project/internal/customer/repository"
+	customerService "github.com/je117er/ocg-final-project/internal/customer/services"
 	productController "github.com/je117er/ocg-final-project/internal/product/controllers"
-	productRepos "github.com/je117er/ocg-final-project/internal/product/repository"
-	productServices "github.com/je117er/ocg-final-project/internal/product/services"
+	productRepository "github.com/je117er/ocg-final-project/internal/product/repository"
+	productService "github.com/je117er/ocg-final-project/internal/product/services"
+	"github.com/je117er/ocg-final-project/internal/utils"
 	"github.com/rs/cors"
 
-	"log"
 	"net/http"
 	"time"
 )
 
-func InitServer() error {
+var logger = utils.SugarLog()
 
-	DB, err := sql.Open("mysql", "root:123456Aa@@tcp(localhost:6033)/vaccine-covid-19?charset=utf8mb4&parseTime=True&loc=Local")
-	//DB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", "root", "123456Aa@", "localhost", "6033", "vaccine-covid-19" ))
+func InitServer() error {
+	logger.Info("Start server ...")
+	DB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		"root", "123456Aa@", "localhost", "6033", "vaccine-covid-19"))
 	if err != nil {
-		log.Fatalln(err)
+		logger.Fatal(err)
 	}
 	defer DB.Close()
-	fmt.Println("you")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	productRepo := productRepos.NewProductRepository(DB)
-	serviceRepo := productServices.NewProductService(productRepo)
+	productRepo := productRepository.NewProductRepository(DB)
+	customerRepo := customerRepository.NewCustomerRepository(DB)
 
-	adminRepo := adminRepos.NewAdminRepository(DB)
-	hp, err := adminRepo.ByUsername(ctx, "tfs03admin")
-	if err != nil {
-		log.Print(err)
-	}
-	log.Println(hp)
-
+	productService := productService.NewProductService(productRepo)
+	customerService := customerService.NewCustomerService(customerRepo)
 
 	r := mux.NewRouter()
-	productController.NewProductController(serviceRepo, ctx, r)
+	productController.NewProductController(productService, ctx, r)
+	customerController.NewCustomerController(customerService, ctx, r)
 
-	// cors.Default() sets up the middleware with default options being
+	// cors.Default() setup the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
 	handler := cors.Default().Handler(r)
-	err = http.ListenAndServe(":8000", handler)
+	err = http.ListenAndServe(":8088", handler)
 	if err != nil {
 		return err
 	}
