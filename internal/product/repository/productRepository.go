@@ -15,12 +15,14 @@ func NewProductRepository(Conn *sql.DB) *ProductRepository {
 	return &ProductRepository{Conn}
 }
 
-func (p *ProductRepository) ByID(ctx context.Context, id string) (models.Product, error) {
-	var product models.Product
- 	//query := `# select * from product where id = uuid_to_bin(?)`
-	//query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product WHERE bin_to_uuid(id) = ?;`
-	query := `select * from product where bin_to_uuid(id) = ?`
-	err := p.Conn.QueryRowContext(ctx, query, id).Scan(
+func (p *ProductRepository) Fetch(ctx context.Context, query string, args ...interface{}) (*models.Product, error) {
+	stmt, err := p.Conn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	row := stmt.QueryRowContext(ctx, args...)
+	product := &models.Product{}
+	if err := row.Scan(
 		&product.ID,
 		&product.Name,
 		&product.Price,
@@ -50,20 +52,20 @@ func (p *ProductRepository) ByID(ctx context.Context, id string) (models.Product
 		&product.Image,
 		&product.LotNumber,
 		&product.ExpiryDate,
-	)
-	switch {
-	case err == sql.ErrNoRows:
-		return models.Product{}, fmt.Errorf("No product with id %s\n", id)
-	case err != nil:
-		return models.Product{}, fmt.Errorf("Query error: %v\n", err)
+	); err != nil {
+		return nil, err
 	}
 	return product, nil
+}
+func (p *ProductRepository) ByID(ctx context.Context, id string) (*models.Product, error) {
+	query := `SELECT * FROM product where id = ?`
+	return p.Fetch(ctx, query, id)
 }
 
 func (p *ProductRepository) All(ctx context.Context) ([]models.Product, error) {
 	var products []models.Product
 	//query := `SELECT BIN_TO_UUID(id) id, name, price, vendor, vaccine_type, authorized_ages, dose, antigen_nature, route_of_administration, storage_requirements, available_formats, diluent, adjuvant, alternate_name, minimum_interval, immunization_schedule, authorized_interval, extended_interval, background, regulatory_actions, safety_status, authorization_status, trials, distribution, funding, slug, image, lot_number, expiry_date FROM product`
-	query := `select * from product where bin_to_uuid(id) = ?`
+	query := `select * from product`
 	fmt.Println("you are hereee")
 	rows, err := p.Conn.QueryContext(ctx, query)
 	fmt.Println("you are hereee")

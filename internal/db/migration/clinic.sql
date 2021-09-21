@@ -1,0 +1,5 @@
+INSERT INTO `vaccine-covid-19`.clinic (id, name, address, contact, location, status) VALUES ('25ee7c3b-2f10-4e84-9e35-5b7f08c2254e', 'Tahoe Forest Hospital District
+', '10121 Pine Ave, Truckee, CA 96161', '(530) 582-3450', null, 1);
+INSERT INTO `vaccine-covid-19`.clinic (id, name, address, contact, location, status) VALUES ('711d7650-3722-42e8-bfb4-118458b16251', 'CVS Pharmacy, Inc', '11230 Donner Pass Rd, Truckee, CA 96161', '(490) 123-3230', null, 1);
+INSERT INTO `vaccine-covid-19`.clinic (id, name, address, contact, location, status) VALUES ('d99f59a9-020c-489e-bbe0-fa743afaff18', 'SAFEWAY PHARMACY', '11290 Donner Pass Rd, Truckee, CA 96161', '(120) 124-4754', null, 1);
+INSERT INTO `vaccine-covid-19`.clinic (id, name, address, contact, location, status) VALUES ('864a8bb1-48cb-484c-9e9e-ae19f128891a', 'Rite Aid', '11411 Deerfield Dr, Truckee, CA 96161', '(465) 641-6532', null, 1);

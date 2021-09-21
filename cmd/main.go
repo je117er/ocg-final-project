@@ -1,14 +1,16 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
+	"github.com/je117er/ocg-final-project/internal/product/controllers"
 	"github.com/je117er/ocg-final-project/internal/product/repository"
+	"github.com/je117er/ocg-final-project/internal/product/services"
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"log"
-	"time"
+	"net/http"
 )
 
 func main() {
@@ -22,25 +24,15 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	//defer DB.Close()
+	defer DB.Close()
 	fmt.Println("you")
 	sugarLogger.Error("Test log err")
-	productRepo := repository.NewProductRepository(DB)
-	fmt.Println("you two")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	//products, err := productRepo.All(ctx)
-	//fmt.Println(err)
-	product, err := productRepo.ByID(ctx, "c370c173-19e2-11ec-a931-0242ac170002")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Printf("%+v\n", product)
-	//queries := db.New(DB)
-	//products, err := queries.GetProducts(ctx)
-	//if err != nil {
-	//	log.Println(err)
-	//}
-	//log.Println(products)
+	productRepo := repository.NewProductRepository(DB)
+	serviceRepo := services.NewProductService(productRepo)
+
+	r := mux.NewRouter()
+	controllers.NewProductController(serviceRepo, r)
+
+	sugarLogger.Fatal(http.ListenAndServe(":8000", r))
 }

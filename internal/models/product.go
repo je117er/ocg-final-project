@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"database/sql"
 )
 
@@ -37,11 +36,4 @@ type Product struct {
 	ExpiryDate            sql.NullTime
 }
 
-type ProductRepository interface {
-	ByID(ctx context.Context, id string) (Product, error)
-	All(ctx context.Context) ([]Product, error)
-}
 
-type ProductService interface {
-	ByID(ctx context.Context, id string) (Product, error)
-}
