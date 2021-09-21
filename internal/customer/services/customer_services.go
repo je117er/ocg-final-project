@@ -62,3 +62,17 @@ func (customerService *CustomerService) CreateCustomer(ctx context.Context, cust
 func (customerService *CustomerService) GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error) {
 	return nil, nil
 }
+
+func (customerService *CustomerService) GetAllByClinicID(ctx context.Context, id string) ([]*models.CustomerResponse, error) {
+	customers, err := customerService.customerRepository.GetAllByClinicID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]*models.CustomerResponse, 0)
+	for _, v := range customers {
+		result = append(result, v.Entity2Response())
+	}
+
+	return result, nil
+}

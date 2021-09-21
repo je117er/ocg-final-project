@@ -52,17 +52,15 @@
 
 - [x] GET admin/clinics
 
-- [ ] GET admin/clinic/{id}/customers -> admin/customers?clinicId=3x23342tfg4
+- [x] GET admin/clinic/{id}/customers -> admin/customers?clinicId=3x23342tfg4
 
-- [ ] GET admin/clinic/{id}/info
+- [x] GET admin/clinic/{id}/info
 
 - [ ] GET admin/clinic/{id}/schedule -> admin/schedule?clinicId=x3f3f&date=2021-24-15&type=19
 
 - [ ] GET admin/clinic/{id}/inventory -> admin/inventory?clinicId=fjeowfehoe
 
-- [ ] PUT admin/clinic/{id}/customers -> admin/customers?clinicId=3x23342tfg4
-
-- [ ] PUT admin/clinic/{id}/info
+- [x] PUT admin/clinic/{id}/info
 
 - [ ] PUT admin/clinic/{id}/schedule -> admin/schedule?clinicId=x3f3f&date=2021-24-15&type=19
 

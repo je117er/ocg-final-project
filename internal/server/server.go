@@ -24,7 +24,6 @@ import (
 	productService "github.com/je117er/ocg-final-project/internal/product/services"
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"github.com/rs/cors"
-
 	"net/http"
 )
 
@@ -62,7 +61,6 @@ func InitServer() error {
 	adminController.NewAdminController(adminServ, ctx, r)
 	s := r.PathPrefix("/admin").Subrouter()
 	s.Use(middleware.JWTVerify)
-
 
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)

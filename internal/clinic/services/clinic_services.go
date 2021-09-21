@@ -32,3 +32,28 @@ func (service *ClinicService) GetAll(ctx context.Context) ([]*models.ClinicRespo
 	}
 	return result, nil
 }
+
+func (service *ClinicService) FindByID(ctx context.Context, id string) (*models.ClinicResponse, error) {
+	res, err := service.clinicRepository.GetByID(ctx, id)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	return res.Entity2Response(), err
+}
+
+func (service *ClinicService) UpdateClinic(ctx context.Context, customerRequest models.ClinicRequest) (*models.ClinicResponse, error) {
+	_, err := service.clinicRepository.GetByID(ctx, customerRequest.ID)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	clinicModel, err := service.clinicRepository.Update(ctx, customerRequest)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+	return clinicModel.Entity2Response(), nil
+}
