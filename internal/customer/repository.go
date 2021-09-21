@@ -11,4 +11,5 @@ type Repository interface {
 	Save(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error)
 	Update(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error)
 	GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error)
+	GetAllByClinicID(ctx context.Context, id string) ([]*models.Customer, error)
 }

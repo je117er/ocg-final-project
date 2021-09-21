@@ -7,6 +7,6 @@ import (
 
 type Repository interface {
 	Fetch(ctx context.Context) ([]*models.Clinic, error)
-	/*GetByID(ctx context.Context, id int) (*models.Clinic, error)
-	Update(ctx context.Context, clinic models.Clinic) (*models.Clinic, error)*/
+	GetByID(ctx context.Context, id string) (*models.Clinic, error)
+	Update(ctx context.Context, clinic models.ClinicRequest) (*models.Clinic, error)
 }
