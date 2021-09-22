@@ -67,7 +67,7 @@ func (repository *CustomerRepository) fetch(ctx context.Context, query string, a
 }
 
 func (repository *CustomerRepository) GetAll(ctx context.Context) ([]*models.Customer, error) {
-	query := `SELECT * FROM customer`
+	query := `SELECT name, dob, gender, city, country FROM customer`
 	result, err := repository.fetch(ctx, query)
 	if err != nil {
 		return nil, err
