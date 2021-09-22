@@ -72,6 +72,7 @@ func InitServer() error {
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
 	handler := cors.Default().Handler(r)
+
 	err = http.ListenAndServe(":8088", handler)
 	if err != nil {
 		return err

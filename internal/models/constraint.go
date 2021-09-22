@@ -7,7 +7,7 @@ type Constraint struct {
 	Code            string
 	Description     sql.NullString
 	VaccineEligible sql.NullBool
-	NeedPrecaution  sql.NullBool
+	Recommendation  string
 }
 
 type ConstraintResponse struct {
@@ -15,7 +15,7 @@ type ConstraintResponse struct {
 	Code            string
 	Description     string
 	VaccineEligible bool
-	NeedPrecaution  bool
+	Recommendation  string
 }
 
 func (constraint Constraint) Entity2Response() *ConstraintResponse {
@@ -24,6 +24,6 @@ func (constraint Constraint) Entity2Response() *ConstraintResponse {
 		Code:            constraint.Code,
 		Description:     constraint.Description.String,
 		VaccineEligible: constraint.VaccineEligible.Bool,
-		NeedPrecaution:  constraint.NeedPrecaution.Bool,
+		Recommendation:  constraint.Recommendation,
 	}
 }

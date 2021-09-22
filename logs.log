@@ -1,5 +1,1 @@
-{"level":"[DEBUG]","time":"2021-09-22 15:50:16","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:26","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:28","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:29","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:30","caller":"controllers/productControllers.go:42","message":"<nil>"}
+{"level":"[INFO]","time":"2021-09-22 22:23:39","caller":"server/server.go:36","message":"Start server ..."}

@@ -1,81 +1,72 @@
 <template>
   <div class="container is-fullhd">
     <h1 class="title">Register for vaccination</h1>
-    <section class="section is-medium">
-        <div class="columns">
-          <h5 class="title is-5">1. Personal information</h5>
-        </div>
-        <b-field grouped class="has-text-left">
-          <b-field label="Name" type="name" expanded>
-            <b-input></b-input>
-          </b-field>
-          <b-field label="Date of Birth" expanded>
-            <b-datepicker
-              placeholder="Type or select a date"
-              icon="calendar-today"
-              editable
-            >
-            </b-datepicker>
-          </b-field>
-          <b-field label="Gender">
-            <b-select>
-              <option>Male</option>
-              <option>Female</option>
-            </b-select>
+      <section class="is-small">
+        <form>
+          <div class="has-text-left is-small"
+               v-for="(condition, index) in conditions" :key="condition.code">
+<!--            <field name="condition.code">-->
+              <div>
+              {{ condition.description }}
+                <div class="has-text-right block">
+                  <b-radio v-model="condition.selected"
+                           :value="yes(index)">
+                    Yes
+                  </b-radio>
+                  <b-radio v-model="condition.selected"
+                           :value="no(index)">
+                    No
+                  </b-radio>
+                </div>
+              </div>
+<!--            </field>-->
+          </div>
+        </form>
+        <p class="content">
+          <b>Selection:</b>
+          {{ radio }}
+        </p>
+      </section>
 
-          </b-field>
-          <b-field label="Phone Number" expanded>
-            <b-input></b-input>
-          </b-field>
-        </b-field>
-        <b-field class="has-text-left" grouped>
-          <b-field label="Email" type="email">
-            <b-input></b-input>
-          </b-field>
-          <b-field label="Insurance Number">
-            <b-input></b-input>
-          </b-field>
-          <b-field label="Address" expanded>
-            <b-input></b-input>
-          </b-field>
-          <b-field label="Ethnicity" expanded>
-            <b-input></b-input>
-          </b-field>
-        </b-field>
-      <b-field class="has-text-left" grouped>
-        <b-field label="Commune">
-          <b-input></b-input>
-        </b-field>
-        <b-field label="District">
-          <b-input></b-input>
-        </b-field>
-        <b-field label="City">
-          <b-input></b-input>
-        </b-field>
-        <b-field label="Nationality" expanded>
-          <b-input></b-input>
-        </b-field>
-      </b-field>
-      <div class="buttons">
-        <b-button tag="router-link"
-                  to="/"
-                  outlined
-                  type="is-link is-danger">
-          Cancel
-        </b-button>
-        <b-button tag="router-link"
-                  to="/expo"
-                  type="is-info">
-          Continue
-        </b-button>
-      </div>
-    </section>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
+
 export default {
   name: 'Register',
+  data() {
+    return {
+      radio: 'jack',
+      radio1: 'jo',
+      constraints: [],
+      conditions: [],
+    };
+  },
+  methods: {
+    yes(value) {
+      return `${value}_yes`;
+    },
+    no(value) {
+      return `${value}_no`;
+    },
+  },
+  created() {
+    Vue.axios.get('http://localhost:8088/constraints').then((response) => {
+      this.constraints = response.data;
+      this.conditions = this.constraints.map((e) => ({
+        code: e.Code,
+        description: e.Description,
+        selected: false,
+      }));
+
+      console.log(this.conditions);
+    })
+      .catch((e) => {
+        console.log(e);
+      });
+  },
 };
 </script>
 
