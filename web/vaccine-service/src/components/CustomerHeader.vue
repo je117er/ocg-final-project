@@ -15,7 +15,7 @@
 
           <b-navbar-item
             tag="router-link"
-            active="true"
+            :active="true"
             :to="{ name: 'product-detail', params: {id: vaccine.ID } }"
             v-for="vaccine in vaccines"
             :key="vaccine.ID"
@@ -26,7 +26,7 @@
         </b-navbar-dropdown>
         <b-navbar-item
           tag="router-link"
-          active="true"
+          :active="true"
           :to="{ name: 'Register' }"
         >
           Register
