@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <customer-header></customer-header>
-<!--    <router-view/>-->
+    <CustomerHeader/>
+    <router-view/>
+    <CustomerFooter/>
   </div>
 </template>
 
@@ -28,9 +29,10 @@
 }
 </style>
 <script>
-import CustomerHeader from './components/CustomerHeader.vue';
+import CustomerHeader from '@/components/CustomerHeader.vue';
+import CustomerFooter from '@/components/CustomerFooter.vue';
 
 export default {
-  components: { CustomerHeader },
+  components: { CustomerHeader, CustomerFooter },
 };
 </script>

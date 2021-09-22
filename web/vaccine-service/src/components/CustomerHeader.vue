@@ -1,48 +1,54 @@
-  <template>
-    <b-navbar fixed-top="true">
+<template>
+  <header>
+    <b-navbar v-bind:fixed-top="true">
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
-          <img
-            src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
-            alt="Lightweight UI components for Vue.js based on Bulma"
-          >
+          <img :src="require('@/assets/images/logo.svg')" alt="logo.svg">
+          <div class="title is-4">Vaccinee-x</div>
         </b-navbar-item>
       </template>
-      <template #start>
+      <template #start class="text-right">
         <b-navbar-item href="#">
           Home
         </b-navbar-item>
-        <b-navbar-item href="#">
-          Documentation
-        </b-navbar-item>
-        <b-navbar-dropdown label="Info" hoverable="true">
-          <b-navbar-item href="#">
-            About
-          </b-navbar-item>
-          <b-navbar-item href="#">
-            Contact
-          </b-navbar-item>
-        </b-navbar-dropdown>
-      </template>
+        <b-navbar-dropdown label="Vaccines" v-bind:hoverable="true">
 
-      <template #end>
-        <b-navbar-item tag="div">
-          <div class="buttons">
-            <a class="button is-primary">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light">
-              Log in
-            </a>
-          </div>
+          <b-navbar-item v-for="vaccine in vaccines" :key="vaccine.Slug">
+            <router-link :to="{name: 'product-detail', query: {id: vaccine.ID}}">
+              {{ vaccine.Slug }}
+            </router-link>
+          </b-navbar-item>
+
+        </b-navbar-dropdown>
+        <b-navbar-item href="#">
+          Register
+        </b-navbar-item>
+        <b-navbar-item href="#">
+          Search
         </b-navbar-item>
       </template>
     </b-navbar>
-  </template>
+  </header>
+</template>
 
 <script>
+import Vue from 'vue';
+
 export default {
   name: 'CustomerHeader',
+  data() {
+    return {
+      vaccines: null,
+    };
+  },
+  methods: {},
+  beforeCreate() {
+    Vue.axios.get('http://localhost:8088/products').then((response) => {
+      this.vaccines = response.data;
+    }).catch((err) => {
+      console.log(err);
+    });
+  },
 };
 </script>
 
