@@ -2,9 +2,11 @@
   <footer class="footer has-background-color-dark ">
     <div class="content has-text-centered">
       <div class="contact">
-        <span><strong>Contact Us</strong></span>
-        <span><strong>COVID-19 Vaccine FAQ</strong></span>
-        <span><strong>Provider Resources </strong></span>
+        <ul>
+          <li><strong>Contact Us</strong></li>
+          <li><strong>COVID-19 Vaccine FAQ</strong></li>
+          <li><strong>Provider Resources </strong></li>
+        </ul>
       </div>
       <p><strong>copyright @ 2021</strong></p>
     </div>
@@ -29,5 +31,16 @@ export default {
 strong {
   color: rgb(255, 255, 255);
   margin: 25px auto;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: inline-flex;
+}
+
+li {
+  padding: 16px;
 }
 </style>

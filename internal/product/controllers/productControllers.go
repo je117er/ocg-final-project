@@ -14,6 +14,8 @@ type ProductController struct {
 	ctx            context.Context
 }
 
+var logger = utils.SugarLog()
+
 func NewProductController(ps product.Service, ctx context.Context, r *mux.Router) {
 	controller := &ProductController{ps, ctx}
 	r.Methods("GET").Path("/product/{id}").HandlerFunc(controller.GetProductByID)
@@ -37,6 +39,7 @@ func (c *ProductController) GetProductByID(w http.ResponseWriter, r *http.Reques
 	id := mux.Vars(r)["id"]
 	result, err := c.ProductService.ByID(c.ctx, id)
 	if err != nil {
+		logger.Debug(result)
 		utils.ResponseWithJson(w, http.StatusInternalServerError, utils.ResponseError{Message: "Internal Server Error"})
 		return
 	}
