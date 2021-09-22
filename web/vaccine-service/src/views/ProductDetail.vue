@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="container is-fullhd">
-      <div class="notification">
+      <h1 v-if="loading">Loading...</h1>
+      <div v-else class="notification">
         <div class="tile is-ancestor">
           <div class="tile is-vertical">
             <div class="tile">
@@ -52,15 +53,31 @@ export default {
   data() {
     return {
       productDetail: {},
-      deep: true,
+      loading: false,
+      // deep: true,
     };
   },
-  methods: {},
+  created() {
+    this.loading = true;
+    this.fetchData();
+  },
   watch: {
-    async $route(to) {
-      const response = await Vue.axios.get(`http://localhost:8088/product/${to.query.id}`);
-      console.log(response);
-      this.productDetail = response.data;
+    $route: 'fetchData',
+  },
+  methods: {
+    async fetchData() {
+      const fetchedID = this.$route.params.id;
+      this.productDetail = null;
+      try {
+        const response = await Vue.axios.get(`http://localhost:8088/product/${this.$route.params.id}`);
+        if (this.$route.params.id !== fetchedID) return;
+        console.log(response);
+        this.productDetail = response.data;
+        this.loading = false;
+      } catch (e) {
+        console.log(e);
+        this.loading = false;
+      }
     },
   },
 };

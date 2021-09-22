@@ -4,7 +4,7 @@
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
           <img :src="require('@/assets/images/logo.svg')" alt="logo.svg">
-          <div class="title is-4">Vaccinee-x</div>
+          <div class="title is-4">Vaccine-x</div>
         </b-navbar-item>
       </template>
       <template #start class="text-right">
@@ -13,10 +13,14 @@
         </b-navbar-item>
         <b-navbar-dropdown label="Vaccines" v-bind:hoverable="true">
 
-          <b-navbar-item v-for="vaccine in vaccines" :key="vaccine.Slug">
-            <router-link :to="{name: 'product-detail', query: {id: vaccine.ID}}">
-              {{ vaccine.Slug }}
-            </router-link>
+          <b-navbar-item v-for="vaccine in vaccines" :key="vaccine.ID">
+<!--            <template v-if="vaccine.ID">-->
+<!--              <router-link :to="{name: 'product-detail', query: {id: vaccine.ID}}">-->
+                <router-link :to="{name: 'product-detail', params: {id: vaccine.ID}}">
+<!--                {{ vaccine.Slug }}-->
+                  {{ vaccine.Slug }}
+              </router-link>
+<!--            </template>-->
           </b-navbar-item>
 
         </b-navbar-dropdown>
@@ -42,7 +46,7 @@ export default {
     };
   },
   methods: {},
-  beforeCreate() {
+  created() {
     Vue.axios.get('http://localhost:8088/products').then((response) => {
       this.vaccines = response.data;
     }).catch((err) => {
