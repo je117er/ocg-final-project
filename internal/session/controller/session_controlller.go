@@ -22,6 +22,18 @@ func NewAdminCustomerController(service session.Service, ctx context.Context, ro
 	controller := SessionController{service, ctx}
 	router.Methods(http.MethodGet).Path("/admin/session").Queries("month", "{month}").HandlerFunc(controller.GetAllSessionInMonth)
 	router.Methods(http.MethodPut).Path("/admin/session").HandlerFunc(controller.UpdateSession)
+	router.Methods(http.MethodGet).Path("/session").Queries("clinicName", "{clinicName}").HandlerFunc(controller.GetSessionByClinic)
+}
+
+func (controller *SessionController) GetSessionByClinic(w http.ResponseWriter, r *http.Request) {
+	clinicName := mux.Vars(r)["clinicName"]
+	results, err := controller.SessionService.GetSessionByClinic(controller.ctx, clinicName)
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusBadRequest, utils.ResponseError{Message: err.Error()})
+		return
+	}
+	utils.ResponseWithJson(w, http.StatusOK, results)
 }
 
 func (controller *SessionController) GetAllSessionInMonth(w http.ResponseWriter, r *http.Request) {

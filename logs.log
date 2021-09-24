@@ -1,1 +1,1 @@
-{"level":"[INFO]","time":"2021-09-24 23:57:13","caller":"repository/clinic_repository.go:72","message":"&{0xc0000a8240 0x4cdb40 0xc000101090 <nil> 0xc000150740 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 00:32:48","caller":"server/server.go:43","message":"Start server ..."}

@@ -8,4 +8,6 @@ import (
 type Service interface {
 	GetAllSessionInMonth(ctx context.Context, month int) ([]*models.SessionCapacityResponse, error)
 	UpdateSession(ctx context.Context, request []*models.SessionCapacityRequest) error
+	GetSessionByClinic(ctx context.Context, clinicName string) ([]*models.SessionByClinicResponse, error)
 }
+
