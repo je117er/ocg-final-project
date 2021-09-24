@@ -20,7 +20,7 @@ var logger = utils.SugarLog()
 
 func NewCustomerController(service customer.Service, ctx context.Context, router *mux.Router) {
 	controller := CustomerController{service, ctx}
-	router.Methods(http.MethodGet).Path("/customer").Queries("email", "{email}").HandlerFunc(controller.GetCustomerByEmail)
+	router.Methods(http.MethodGet).Path("/customer").Queries("email", "{email}").HandlerFunc(controller.GetEmailExists)
 	router.Methods(http.MethodPut).Path("/customer").HandlerFunc(controller.UpdateCustomer)
 	router.Methods(http.MethodPost).Path("/customer").HandlerFunc(controller.CreateCustomer)
 	router.Methods(http.MethodGet).Path("/customer").PathPrefix("/{id}/cert").HandlerFunc(controller.GetCertByID)
@@ -41,12 +41,26 @@ func (controller *CustomerController) GetCustomerByEmail(w http.ResponseWriter, 
 	c, err := controller.CustomerService.GetByEmail(controller.ctx, email)
 	if err != nil {
 		logger.Error(err)
-		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: "Email doesn't exist!"})
 
 		return
 	}
 
 	utils.ResponseWithJson(w, http.StatusOK, c)
+}
+
+func (controller *CustomerController) GetEmailExists(w http.ResponseWriter, r *http.Request) {
+	email := r.URL.Query().Get("email")
+
+	_, err := controller.CustomerService.GetByEmail(controller.ctx, email)
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusOK, models.ResponseError{Message: "Email doesn't exist!"})
+
+		return
+	}
+
+	utils.ResponseWithJson(w, http.StatusNotAcceptable, models.ResponseError{Message: "Email already exists!"})
 }
 
 func (controller *CustomerController) GetCustomers(w http.ResponseWriter, r *http.Request) {
