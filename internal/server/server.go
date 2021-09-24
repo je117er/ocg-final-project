@@ -9,6 +9,9 @@ import (
 	adminController "github.com/je117er/ocg-final-project/internal/admin/controller"
 	adminRepository "github.com/je117er/ocg-final-project/internal/admin/repository"
 	adminService "github.com/je117er/ocg-final-project/internal/admin/services"
+	bookingController "github.com/je117er/ocg-final-project/internal/booking/controller"
+	bookingRepository "github.com/je117er/ocg-final-project/internal/booking/repository"
+	bookingService "github.com/je117er/ocg-final-project/internal/booking/services"
 	clinicController "github.com/je117er/ocg-final-project/internal/clinic/controller"
 	clinicRepository "github.com/je117er/ocg-final-project/internal/clinic/repository"
 	clinicService "github.com/je117er/ocg-final-project/internal/clinic/services"
@@ -25,6 +28,10 @@ import (
 	productController "github.com/je117er/ocg-final-project/internal/product/controllers"
 	productRepository "github.com/je117er/ocg-final-project/internal/product/repository"
 	productService "github.com/je117er/ocg-final-project/internal/product/services"
+	sessionController "github.com/je117er/ocg-final-project/internal/session/controller"
+	sessionRepository "github.com/je117er/ocg-final-project/internal/session/repository"
+	sessionService "github.com/je117er/ocg-final-project/internal/session/services"
+	stockRepository "github.com/je117er/ocg-final-project/internal/stock/repository"
 	"github.com/je117er/ocg-final-project/internal/utils"
 	"github.com/rs/cors"
 	"net/http"
@@ -50,28 +57,39 @@ func InitServer() error {
 	clinicRepo := clinicRepository.NewClinicRepository(DB)
 	adminRepo := adminRepository.NewAdminRepository(DB)
 	conditionRepo := conditionRepository.NewConditionRepository(DB)
+	bookingRepo := bookingRepository.NewBookingRepository(DB)
+	stockRepo := stockRepository.NewStockRepository(DB)
+	sessionRepo := sessionRepository.NewSessionRepository(DB)
 
-	productService := productService.NewProductService(productRepo)
-	customerService := customerService.NewCustomerService(customerRepo)
-	constraintService := constraintService.NewConstraintService(constraintRepo)
-	clinicService := clinicService.NewClinicService(clinicRepo)
+	productServ := productService.NewProductService(productRepo)
+	customerServ := customerService.NewCustomerService(customerRepo)
+	constraintServ := constraintService.NewConstraintService(constraintRepo)
+	clinicServ := clinicService.NewClinicService(clinicRepo)
 	adminServ := adminService.NewAdminService(adminRepo)
 	conditionServ := conditionService.NewConditionService(conditionRepo)
+	bookingServ := bookingService.NewBookingService(bookingRepo, stockRepo)
+	sessionServ := sessionService.NewSessionService(sessionRepo)
 
 	r := mux.NewRouter()
-	productController.NewProductController(productService, ctx, r)
-	customerController.NewCustomerController(customerService, ctx, r)
-	constraintController.NewConstraintController(constraintService, ctx, r)
-	clinicController.NewClinicController(clinicService, ctx, r)
+	productController.NewProductController(productServ, ctx, r)
+	customerController.NewCustomerController(customerServ, ctx, r)
+	constraintController.NewConstraintController(constraintServ, ctx, r)
+	clinicController.NewClinicController(clinicServ, ctx, r)
 	adminController.NewAdminController(adminServ, ctx, r)
 	conditionController.NewConditionController(conditionServ, ctx, r)
+	bookingController.NewBookingController(bookingServ, ctx, r)
+	sessionController.NewAdminCustomerController(sessionServ, ctx, r)
+
+	customerController.NewAdminCustomerController(customerServ, ctx, r)
 	s := r.PathPrefix("/admin").Subrouter()
 	s.Use(middleware.JWTVerify)
 
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
-	handler := cors.Default().Handler(r)
+
+
+	handler := cors.AllowAll().Handler(r)
 
 	err = http.ListenAndServe(":8088", handler)
 	if err != nil {

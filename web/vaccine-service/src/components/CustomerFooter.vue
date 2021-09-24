@@ -32,7 +32,7 @@ strong {
   color: rgb(255, 255, 255);
   margin: 25px auto;
 }
-ul {
+.contact ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
