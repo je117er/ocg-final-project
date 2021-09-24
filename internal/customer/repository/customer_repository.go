@@ -67,7 +67,7 @@ func (repository *CustomerRepository) fetch(ctx context.Context, query string, a
 }
 
 func (repository *CustomerRepository) GetAll(ctx context.Context) ([]*models.Customer, error) {
-	query := `SELECT name, dob, gender, city, country FROM customer`
+	query := `SELECT * FROM customer`
 	result, err := repository.fetch(ctx, query)
 	if err != nil {
 		return nil, err
@@ -167,7 +167,7 @@ func (repository *CustomerRepository) GetAllByClinicID(ctx context.Context, id s
 			where id in (
 				select customer_id
 				from booking
-				where daily_capacity_id in
+				where session_capacity_id in
 					  (select id from session_capacity where clinic_id = ?)
 			)`
 

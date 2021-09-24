@@ -1,23 +1,40 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 type Booking struct {
-	ID                sql.NullInt32
-	CustomerID        int32
+	ID                sql.NullInt64
+	CustomerID        int64
 	DateRegistered    sql.NullTime
 	DateBooked        sql.NullTime
-	TimePeriod        sql.NullInt32
-	DosesCompleted    sql.NullInt32
+	TimePeriod        sql.NullInt64
+	DosesCompleted    sql.NullInt64
 	VaccineName       sql.NullString
-	ExtendedInterval  sql.NullInt32
+	ExtendedInterval  sql.NullInt64
 	LotNumber         sql.NullString
 	ClinicName        sql.NullString
 	Price             sql.NullString
-	SentReminderEmail sql.NullInt32
-	DailyCapacityID   sql.NullInt32
+	SentReminderEmail sql.NullInt64
+	SessionCapacityID sql.NullInt64
 	TotalBill         sql.NullString
 	PaymentStatus     sql.NullBool
 	StockItemID       sql.NullString
-	DiscountID        int32
+}
+
+type VaccinationResponse struct {
+	BookingID        int       `json:"bookingID"`
+	Dose             int       `json:"dose"`
+	VaccineName      string    `json:"vaccineName"`
+	RegistrationTime time.Time `json:"registrationTime"`
+	Completed        bool      `json:"completed"`
+	VaccinationTime  time.Time `json:"vaccinationTime"`
+	Clinic           string    `json:"clinic"`
+}
+
+type VaccinationRequest struct {
+	BookingID int `json:"bookingID"`
+	Completed int `json:"completed"`
 }
