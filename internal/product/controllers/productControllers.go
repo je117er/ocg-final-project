@@ -20,6 +20,7 @@ func NewProductController(ps product.Service, ctx context.Context, r *mux.Router
 	controller := &ProductController{ps, ctx}
 	r.Methods("GET").Path("/product/{id}").HandlerFunc(controller.GetProductByID)
 	r.Methods("GET").Path("/products").HandlerFunc(controller.GetProducts)
+	r.Methods("GET").Path("/productlist").HandlerFunc(controller.GetProductNameID)
 }
 
 func (c *ProductController) GetProducts(w http.ResponseWriter, r *http.Request) {
@@ -33,6 +34,20 @@ func (c *ProductController) GetProducts(w http.ResponseWriter, r *http.Request) 
 		responses = append(responses, result.ModelToResponse())
 	}
 	utils.ResponseWithJson(w, http.StatusOK, responses)
+}
+
+func (c *ProductController) GetProductNameID(w http.ResponseWriter, r *http.Request) {
+	results, err := c.ProductService.AllNameID(c.ctx)
+	if err != nil {
+		utils.ResponseWithJson(w, http.StatusInternalServerError, utils.ResponseError{Message: "Error retrieving product list"})
+		return
+	}
+	var responses []*models.ProductNameIDResponse
+	for _, result := range results {
+		responses = append(responses, result.ModelToResponse())
+	}
+	utils.ResponseWithJson(w, http.StatusOK, responses)
+
 }
 
 func (c *ProductController) GetProductByID(w http.ResponseWriter, r *http.Request) {

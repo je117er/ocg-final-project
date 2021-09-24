@@ -102,3 +102,20 @@ func (p Product) ModelToResponse() *ProductResponse {
 		ExpiryDate:            p.ExpiryDate.Time,
 	}
 }
+
+type ProductNameID struct {
+	ID   string
+	Name sql.NullString
+}
+
+type ProductNameIDResponse struct {
+	ID   string
+	Name string
+}
+
+func (p ProductNameID) ModelToResponse() *ProductNameIDResponse {
+	return &ProductNameIDResponse{
+		ID:   p.ID,
+		Name: p.Name.String,
+	}
+}

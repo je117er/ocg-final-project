@@ -1,5 +1,12 @@
-{"level":"[DEBUG]","time":"2021-09-22 15:50:16","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:26","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:28","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:29","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:30","caller":"controllers/productControllers.go:42","message":"<nil>"}
+{"level":"[ERROR]","time":"2021-09-24 16:23:01","caller":"controller/customer_controlller.go:57","message":"Email 8 not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:35:58","caller":"controller/customer_controlller.go:57","message":"Email jjlj not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:41:57","caller":"controller/customer_controlller.go:57","message":"Email  not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:43:42","caller":"controller/customer_controlller.go:57","message":"Email j not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:43:43","caller":"controller/customer_controlller.go:57","message":"Email j not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:43:57","caller":"controller/customer_controlller.go:57","message":"Email jgmail@gmail.com not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:43:58","caller":"controller/customer_controlller.go:57","message":"Email jgmail@gmail.com not exist"}
+{"level":"[ERROR]","time":"2021-09-24 16:44:27","caller":"controller/customer_controlller.go:57","message":"Email fjlkjasfla not exist"}
+{"level":"[ERROR]","time":"2021-09-24 17:01:58","caller":"controller/customer_controlller.go:57","message":"Email 898 not exist"}
+{"level":"[ERROR]","time":"2021-09-24 17:19:46","caller":"controller/customer_controlller.go:57","message":"Email jljkljlkj not exist"}
+{"level":"[ERROR]","time":"2021-09-24 20:04:35","caller":"controller/customer_controlller.go:57","message":"Email jljjl not exist"}
+e":"sql: no rows in result set"}

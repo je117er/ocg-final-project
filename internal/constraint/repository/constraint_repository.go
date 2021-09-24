@@ -32,7 +32,7 @@ func (repository *ConstraintRepository) fetch(ctx context.Context, query string,
 	result := make([]*models.Constraint, 0)
 	for rows.Next() {
 		cst := new(models.Constraint)
-		err := rows.Scan(&cst.ID, &cst.Code, &cst.Description, &cst.VaccineEligible, &cst.NeedPrecaution)
+		err := rows.Scan(&cst.ID, &cst.Code, &cst.Description, &cst.VaccineEligible, &cst.Recommendation)
 		if err != nil {
 			logger.Error(err)
 			return nil, err

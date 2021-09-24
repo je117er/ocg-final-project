@@ -8,4 +8,5 @@ import (
 type Service interface {
 	ByID(ctx context.Context, id string) (*models.Product, error)
 	All(ctx context.Context) ([]models.Product, error)
+	AllNameID(ctx context.Context) ([]models.ProductNameID, error)
 }

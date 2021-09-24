@@ -11,8 +11,8 @@
                   <article class="tile is-child is-info">
                     <figure class="image is-4by3">
 <!--                      <img :src="require('@/assets/images/logo.svg')" alt="logo.svg">-->
-                      <img :src="require('@/assets/images/pfizer.jpg')" alt="logo.svg">
-<!--                      <img :src="productDetail.Image" alt="image" />-->
+<!--                      <img :src="require('@/assets/images/pfizer.jpg')" alt="logo.svg">-->
+                      <img :src="productDetail.Image" alt="image" />
 <!--                          <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fbaotintuc.vn%2Fthe-gioi%2Fpfizer-phat-trien-vaccine-covid19-dac-tri-bien-the-delta-20210825102753231.htm&psig=AOvVaw0OgY-aeaRP8I-OhT7q2Syy&ust=1632387632482000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMi6mv2bkvMCFQAAAAAdAAAAABAD" alt="image"/>-->
                     </figure>
                   </article>
@@ -56,9 +56,7 @@
 <!--                        .slice(0, productDetail.RegulatoryActions.length-2) }}</p>-->
                     <p><strong>Safety Status: </strong>{{ productDetail.SafetyStatus }}</p>
                     <p><strong>Distribution: </strong>
-                      {{ productDetail.Distribution
-                        .slice(0, productDetail.Distribution.length - 2)
-                      }}</p>
+                      {{ productDetail.Distribution}}</p>
                     <p><strong>Funding: </strong>{{ productDetail.Funding }}</p>
                   </div>
                 </div>
