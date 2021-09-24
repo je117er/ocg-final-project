@@ -15,6 +15,29 @@ type SessionCapacity struct {
 	SlotLeft    sql.NullInt64
 }
 
+type SessionByClinic struct {
+	ClinicID sql.NullString
+	SessionID int
+	TimePeriod sql.NullInt64
+	CurrentDate sql.NullTime
+}
+
+type SessionByClinicResponse struct {
+	ClinicID string `json:"clinic_id"`
+	SessionID int `json:"session_id"`
+	TimePeriod int `json:"time_period"`
+	CurrentDate time.Time `json:"current_date"`
+}
+
+func (s SessionByClinic) ModelToResponse() *SessionByClinicResponse {
+	return &SessionByClinicResponse{
+		ClinicID: s.ClinicID.String,
+		SessionID: s.SessionID,
+		TimePeriod: int(s.TimePeriod.Int64),
+		CurrentDate: s.CurrentDate.Time,
+	}
+}
+
 type SessionCapacityResponse struct {
 	ID          int       `json:"id"`
 	ClinicID    string    `json:"clinicID"`

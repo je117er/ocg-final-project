@@ -62,6 +62,34 @@ func (repository *ClinicRepository) fetch(ctx context.Context, query string, arg
 
 }
 
+func (repository *ClinicRepository) GetClinicByVaccine(ctx context.Context, vaccine string) ([]*models.ClinicByVaccine, error) {
+	query := `
+select clinic.name as clinic_name, si.id as stock_item_id, si.name as stock_name, si.authorized_interval, si.lot_number, si.price   from clinic
+join stock_item si on clinic.id = si.clinic_id
+where si.name like ?;
+`
+	rows, err := repository.conn.QueryContext(ctx, query, vaccine)
+	logger.Info(rows)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+	defer rows.Close()
+	responses := make([]*models.ClinicByVaccine, 0)
+	response := new(models.ClinicByVaccine)
+	for rows.Next() {
+		if err := rows.Scan(&response.ClinicName, &response.StockItemID, &response.StockName, &response.AuthorizedInterval, &response.LotNumber, &response.Price); err != nil {
+			logger.Error(err)
+			continue
+		}
+		responses = append(responses, response)
+	}
+	if err := rows.Err(); err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+	return responses, nil
+}
 func (repository *ClinicRepository) Fetch(ctx context.Context) ([]*models.Clinic, error) {
 	query := "SELECT * FROM `clinic`"
 	return repository.fetch(ctx, query)
