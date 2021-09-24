@@ -33,6 +33,18 @@ func (service *ClinicService) GetAll(ctx context.Context) ([]*models.ClinicRespo
 	return result, nil
 }
 
+func (service *ClinicService) GetClinicByVaccine(ctx context.Context, vaccine string) ([]*models.ClinicByVaccineResponse, error) {
+	results, err := service.clinicRepository.GetClinicByVaccine(ctx, vaccine)
+	if err != nil {
+		return nil, err
+	}
+	var responses []*models.ClinicByVaccineResponse
+	for _, res := range results {
+		responses = append(responses, res.ModelToResponse())
+	}
+	return responses, nil
+}
+
 func (service *ClinicService) FindByID(ctx context.Context, id string) (*models.ClinicResponse, error) {
 	res, err := service.clinicRepository.GetByID(ctx, id)
 	if err != nil {

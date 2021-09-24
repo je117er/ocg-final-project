@@ -22,6 +22,7 @@ func NewClinicController(service clinic.Service, ctx context.Context, router *mu
 	router.Methods(http.MethodGet).Path("/admin/clinics").HandlerFunc(controller.GetAll)
 	router.Methods(http.MethodGet).Path("/admin/clinic/{id}/info").HandlerFunc(controller.GetByClinicID)
 	router.Methods(http.MethodPut).Path("/admin/clinic/{id}/info").HandlerFunc(controller.UpdateClinic)
+	router.Methods(http.MethodGet).Path("/clinic").Queries("vaccineName", "{vaccineName}").HandlerFunc(controller.GetClinicByVaccine)
 }
 
 func (controller *ClinicController) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -29,10 +30,19 @@ func (controller *ClinicController) GetAll(w http.ResponseWriter, r *http.Reques
 	if err != nil {
 		logger.Error(err)
 		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
-
 		return
 	}
+	utils.ResponseWithJson(w, http.StatusOK, response)
+}
 
+func (controller *ClinicController) GetClinicByVaccine(w http.ResponseWriter, r *http.Request) {
+	vaccineName := mux.Vars(r)["vaccineName"]
+	response, err := controller.ClinicService.GetClinicByVaccine(controller.ctx, vaccineName)
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		return
+	}
 	utils.ResponseWithJson(w, http.StatusOK, response)
 }
 
