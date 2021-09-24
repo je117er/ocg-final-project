@@ -34,7 +34,7 @@ CREATE TABLE `product`
 CREATE TABLE `customer`
 (
     `id`               int PRIMARY KEY AUTO_INCREMENT,
-    `email`            varchar(100) unique ,
+    `email`            varchar(100) unique,
     `name`             varchar(100),
     `address`          varchar(255),
     `gender`           varchar(10),
@@ -48,7 +48,7 @@ CREATE TABLE `customer`
     `nationality`      varchar(25)
 );
 
-CREATE TABLE `medical_condition`
+CREATE TABLE `medical_history`
 (
     `id`               int AUTO_INCREMENT,
     `code`             varchar(255) UNIQUE NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE `constraint`
 CREATE TABLE `product_constraint`
 (
     `product_id`    varchar(50) NOT NULL,
-    `constraint_id` int NOT NULL,
+    `constraint_id` int         NOT NULL,
     PRIMARY KEY (`product_id`, `constraint_id`)
 );
 
@@ -86,12 +86,13 @@ CREATE TABLE `clinic`
 
 CREATE TABLE `session_capacity`
 (
-    `id`                 int PRIMARY KEY AUTO_INCREMENT,
-    `clinic_id`          varchar(50),
-    `capacity`           int,
-    `type`              tinyint,
-    `status` tinyint,
-    `current_date`       date
+    `id`           int PRIMARY KEY AUTO_INCREMENT,
+    `clinic_id`    varchar(50),
+    `capacity`     int,
+    `type`         tinyint,
+    `status`       tinyint,
+    `current_date` date,
+    `slots_left`   int
 );
 
 CREATE TABLE `stock_item`
@@ -101,9 +102,11 @@ CREATE TABLE `stock_item`
     `quantity`    int,
     `name`        varchar(255),
     `price`       decimal,
+    `stock_left`  int,
     `lot_number`  varchar(10),
     `expiry_date` date,
-    `product_id`  varchar(50)
+    `product_id`  varchar(50),
+    `immunization_schedule` int
 );
 
 CREATE TABLE `booking`
@@ -120,34 +123,10 @@ CREATE TABLE `booking`
     `clinic_name`         varchar(255),
     `price`               decimal,
     `sent_reminder_email` tinyint,
-    `daily_capacity_id`   int,
+    `session_capacity_id` int,
     `total_bill`          decimal,
     `payment_status`      tinyint(1),
     `stock_item_id`       varchar(50),
-    `discount_id`         int NOT NULL,
-    PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `price_rule`
-(
-    `id`                int AUTO_INCREMENT,
-    `product_id`        varchar(50) NOT NULL,
-    `value`             decimal,
-    `value_type`        tinyint,
-    `once_per_customer` tinyint(1),
-    `usage_limit`       int,
-    `starts_at`         datetime,
-    `ends_at`           datetime,
-    `title`             varchar(255),
-    PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `discount`
-(
-    `id`            int AUTO_INCREMENT,
-    `code`          varchar(255),
-    `usage_count`   int,
-    `price_rule_id` int NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -158,7 +137,7 @@ CREATE TABLE `admin`
     `password` varchar(100)
 );
 
-ALTER TABLE `medical_condition`
+ALTER TABLE `medical_history`
     ADD FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`);
 
 ALTER TABLE `product_constraint`
@@ -170,20 +149,12 @@ ALTER TABLE `product_constraint`
 ALTER TABLE `booking`
     ADD FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`);
 
-ALTER TABLE `booking`
-    ADD FOREIGN KEY (`discount_id`) REFERENCES `discount` (`id`);
-
-ALTER TABLE `price_rule`
-    ADD FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
-
-ALTER TABLE `discount`
-    ADD FOREIGN KEY (`price_rule_id`) REFERENCES `price_rule` (`id`);
 
 ALTER TABLE session_capacity
     ADD FOREIGN KEY (`clinic_id`) REFERENCES `clinic` (`id`);
 
 ALTER TABLE `booking`
-    ADD FOREIGN KEY (`daily_capacity_id`) REFERENCES session_capacity (`id`);
+    ADD FOREIGN KEY (`session_capacity_id`) REFERENCES session_capacity (`id`);
 
 ALTER TABLE `stock_item`
     ADD FOREIGN KEY (`clinic_id`) REFERENCES `clinic` (`id`);
