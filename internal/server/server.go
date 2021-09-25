@@ -76,12 +76,15 @@ func InitServer() error {
 	customerController.NewCustomerController(customerServ, ctx, r)
 	constraintController.NewConstraintController(constraintServ, ctx, r)
 	adminController.NewAdminController(adminServ, ctx, r)
+	sessionController.NewSessionController(sessionServ, ctx, r)
+	clinicController.NewClinicController(clinicServ, ctx, r)
 
 	// Admin
 	s := r.PathPrefix("/admin").Subrouter()
 	s.Use(middleware.JWTVerify)
 
 	customerController.NewAdminCustomerController(customerServ, ctx, s)
+	clinicController.NewAdminClinicController(clinicServ, ctx, r)
 	clinicController.NewClinicController(clinicServ, ctx, s)
 	sessionController.NewAdminSessionController(sessionServ, ctx, s)
 	conditionController.NewConditionController(conditionServ, ctx, s)
@@ -90,7 +93,10 @@ func InitServer() error {
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
+
+
 	handler := cors.AllowAll().Handler(r)
+
 	err = http.ListenAndServe(":8088", handler)
 	if err != nil {
 		return err

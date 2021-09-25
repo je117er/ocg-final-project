@@ -1,8 +1,1 @@
-{"level":"[INFO]","time":"2021-09-25 10:38:00","caller":"server/server.go:43","message":"Start server ..."}
-er..."}
-{"level":"[INFO]","time":"2021-09-25 10:38:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
-{"level":"[INFO]","time":"2021-09-25 10:39:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
-{"level":"[INFO]","time":"2021-09-25 10:40:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
-{"level":"[INFO]","time":"2021-09-25 10:41:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
-{"level":"[INFO]","time":"2021-09-25 10:42:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
-{"level":"[INFO]","time":"2021-09-25 10:43:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 00:32:48","caller":"server/server.go:43","message":"Start server ..."}

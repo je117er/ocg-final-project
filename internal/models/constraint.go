@@ -6,16 +6,16 @@ type Constraint struct {
 	ID              int
 	Code            string
 	Description     sql.NullString
-	VaccineEligible sql.NullBool
-	NeedPrecaution  sql.NullBool
+	VaccineEligible sql.NullInt32
+	Recommendation  string
 }
 
 type ConstraintResponse struct {
 	ID              int
 	Code            string
 	Description     string
-	VaccineEligible bool
-	NeedPrecaution  bool
+	VaccineEligible int32
+	Recommendation  string
 }
 
 func (constraint Constraint) Entity2Response() *ConstraintResponse {
@@ -23,7 +23,7 @@ func (constraint Constraint) Entity2Response() *ConstraintResponse {
 		ID:              constraint.ID,
 		Code:            constraint.Code,
 		Description:     constraint.Description.String,
-		VaccineEligible: constraint.VaccineEligible.Bool,
-		NeedPrecaution:  constraint.NeedPrecaution.Bool,
+		VaccineEligible: constraint.VaccineEligible.Int32,
+		Recommendation:  constraint.Recommendation,
 	}
 }

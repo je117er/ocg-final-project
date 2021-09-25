@@ -17,22 +17,37 @@ type ClinicController struct {
 
 var logger = utils.SugarLog()
 
-func NewClinicController(service clinic.Service, ctx context.Context, router *mux.Router) {
+func NewAdminClinicController(service clinic.Service, ctx context.Context, router *mux.Router) {
 	controller := ClinicController{service, ctx}
 	router.Methods(http.MethodGet).Path("/clinics").HandlerFunc(controller.GetAll)
 	router.Methods(http.MethodGet).Path("/clinic/{id}/info").HandlerFunc(controller.GetByClinicID)
 	router.Methods(http.MethodPut).Path("/clinic/{id}/info").HandlerFunc(controller.UpdateClinic)
 }
 
+func NewClinicController(service clinic.Service, ctx context.Context, router *mux.Router) {
+	controller := ClinicController{service, ctx}
+	router.Methods(http.MethodGet).Path("/clinic").Queries("vaccineName", "{vaccineName}").HandlerFunc(controller.GetClinicByVaccine)
+}
+
+
 func (controller *ClinicController) GetAll(w http.ResponseWriter, r *http.Request) {
 	response, err := controller.ClinicService.GetAll(controller.ctx)
 	if err != nil {
 		logger.Error(err)
 		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
-
 		return
 	}
+	utils.ResponseWithJson(w, http.StatusOK, response)
+}
 
+func (controller *ClinicController) GetClinicByVaccine(w http.ResponseWriter, r *http.Request) {
+	vaccineName := mux.Vars(r)["vaccineName"]
+	response, err := controller.ClinicService.GetClinicByVaccine(controller.ctx, vaccineName)
+	if err != nil {
+		logger.Error(err)
+		utils.ResponseWithJson(w, http.StatusInternalServerError, models.ResponseError{Message: err.Error()})
+		return
+	}
 	utils.ResponseWithJson(w, http.StatusOK, response)
 }
 

@@ -32,3 +32,11 @@ func (ps *ProductService) All(ctx context.Context) ([]models.Product, error) {
 	}
 	return res, nil
 }
+
+func (ps *ProductService) AllNameID(ctx context.Context) ([]models.ProductNameID, error) {
+	res, err := ps.productRepo.AllNameID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
