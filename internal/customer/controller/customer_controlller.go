@@ -28,11 +28,11 @@ func NewCustomerController(service customer.Service, ctx context.Context, router
 
 func NewAdminCustomerController(service customer.Service, ctx context.Context, router *mux.Router) {
 	controller := CustomerController{service, ctx}
-	router.Methods(http.MethodGet).Path("/admin/customers").HandlerFunc(controller.GetCustomers)
-	router.Methods(http.MethodGet).Path("/admin/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.GetCustomerByClinicId)
-	router.Methods(http.MethodPut).Path("/admin/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.UpdateCustomer)
-	router.Methods(http.MethodGet).Path("/admin/customer/{id:[0-9]+}").HandlerFunc(controller.GetCustomerByID)
-	router.Methods(http.MethodPut).Path("/admin/customer").HandlerFunc(controller.UpdateCustomer)
+	router.Methods(http.MethodGet).Path("/customers").HandlerFunc(controller.GetCustomers)
+	router.Methods(http.MethodGet).Path("/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.GetCustomerByClinicId)
+	router.Methods(http.MethodPut).Path("/customer").Queries("clinicId", "{clinicId}").HandlerFunc(controller.UpdateCustomer)
+	router.Methods(http.MethodGet).Path("/customer/{id:[0-9]+}").HandlerFunc(controller.GetCustomerByID)
+	router.Methods(http.MethodPut).Path("/customer").HandlerFunc(controller.UpdateCustomer)
 
 }
 

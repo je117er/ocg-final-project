@@ -1,5 +1,8 @@
-{"level":"[DEBUG]","time":"2021-09-22 15:50:16","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:26","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:28","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:29","caller":"controllers/productControllers.go:42","message":"<nil>"}
-{"level":"[DEBUG]","time":"2021-09-22 17:18:30","caller":"controllers/productControllers.go:42","message":"<nil>"}
+{"level":"[INFO]","time":"2021-09-25 10:38:00","caller":"server/server.go:43","message":"Start server ..."}
+er..."}
+{"level":"[INFO]","time":"2021-09-25 10:38:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 10:39:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 10:40:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 10:41:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 10:42:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 10:43:30","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}

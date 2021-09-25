@@ -18,10 +18,10 @@ type SessionController struct {
 
 var logger = utils.SugarLog()
 
-func NewAdminCustomerController(service session.Service, ctx context.Context, router *mux.Router) {
+func NewAdminSessionController(service session.Service, ctx context.Context, router *mux.Router) {
 	controller := SessionController{service, ctx}
-	router.Methods(http.MethodGet).Path("/admin/session").Queries("month", "{month}").HandlerFunc(controller.GetAllSessionInMonth)
-	router.Methods(http.MethodPut).Path("/admin/session").HandlerFunc(controller.UpdateSession)
+	router.Methods(http.MethodGet).Path("/session").Queries("month", "{month}").HandlerFunc(controller.GetAllSessionInMonth)
+	router.Methods(http.MethodPut).Path("/session").HandlerFunc(controller.UpdateSession)
 }
 
 func (controller *SessionController) GetAllSessionInMonth(w http.ResponseWriter, r *http.Request) {

@@ -70,19 +70,22 @@ func InitServer() error {
 	bookingServ := bookingService.NewBookingService(bookingRepo, stockRepo)
 	sessionServ := sessionService.NewSessionService(sessionRepo)
 
+	// Guest
 	r := mux.NewRouter()
 	productController.NewProductController(productServ, ctx, r)
 	customerController.NewCustomerController(customerServ, ctx, r)
 	constraintController.NewConstraintController(constraintServ, ctx, r)
-	clinicController.NewClinicController(clinicServ, ctx, r)
 	adminController.NewAdminController(adminServ, ctx, r)
-	conditionController.NewConditionController(conditionServ, ctx, r)
-	bookingController.NewBookingController(bookingServ, ctx, r)
-	sessionController.NewAdminCustomerController(sessionServ, ctx, r)
 
-	customerController.NewAdminCustomerController(customerServ, ctx, r)
+	// Admin
 	s := r.PathPrefix("/admin").Subrouter()
 	s.Use(middleware.JWTVerify)
+
+	customerController.NewAdminCustomerController(customerServ, ctx, s)
+	clinicController.NewClinicController(clinicServ, ctx, s)
+	sessionController.NewAdminSessionController(sessionServ, ctx, s)
+	conditionController.NewConditionController(conditionServ, ctx, s)
+	bookingController.NewBookingController(bookingServ, ctx, s)
 
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)

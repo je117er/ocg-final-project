@@ -19,9 +19,9 @@ var logger = utils.SugarLog()
 
 func NewClinicController(service clinic.Service, ctx context.Context, router *mux.Router) {
 	controller := ClinicController{service, ctx}
-	router.Methods(http.MethodGet).Path("/admin/clinics").HandlerFunc(controller.GetAll)
-	router.Methods(http.MethodGet).Path("/admin/clinic/{id}/info").HandlerFunc(controller.GetByClinicID)
-	router.Methods(http.MethodPut).Path("/admin/clinic/{id}/info").HandlerFunc(controller.UpdateClinic)
+	router.Methods(http.MethodGet).Path("/clinics").HandlerFunc(controller.GetAll)
+	router.Methods(http.MethodGet).Path("/clinic/{id}/info").HandlerFunc(controller.GetByClinicID)
+	router.Methods(http.MethodPut).Path("/clinic/{id}/info").HandlerFunc(controller.UpdateClinic)
 }
 
 func (controller *ClinicController) GetAll(w http.ResponseWriter, r *http.Request) {

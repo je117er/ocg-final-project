@@ -33,7 +33,7 @@ func (service *BookingService) GetVaccinationByCustomerID(ctx context.Context, c
 
 	currentTime := res.DateBooked.Time
 	for i := 1; i <= int(immunizationSchedule); i++ {
-		currentTime = currentTime.AddDate(0, 0, (i-1)*int(res.ExtendedInterval.Int64))
+		currentTime = currentTime.AddDate(0, 0, (i-1)*int(res.AuthorizedInterval.Int64))
 
 		vaccinationResponse := models.VaccinationResponse{
 			BookingID:        int(res.CustomerID),

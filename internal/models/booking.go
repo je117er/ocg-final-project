@@ -12,9 +12,9 @@ type Booking struct {
 	DateBooked        sql.NullTime
 	TimePeriod        sql.NullInt64
 	DosesCompleted    sql.NullInt64
-	VaccineName       sql.NullString
-	ExtendedInterval  sql.NullInt64
-	LotNumber         sql.NullString
+	VaccineName        sql.NullString
+	AuthorizedInterval sql.NullInt64
+	LotNumber          sql.NullString
 	ClinicName        sql.NullString
 	Price             sql.NullString
 	SentReminderEmail sql.NullInt64

@@ -29,7 +29,7 @@ func (repository *StockRepository) getOne(ctx context.Context, query string, arg
 	row := stmt.QueryRowContext(ctx, args...)
 	stock := &models.StockItem{}
 	err = row.Scan(&stock.ID, &stock.ClinicID, &stock.Quantity, &stock.Name, &stock.Price, &stock.LotNumber,
-		&stock.ExpiryDate, &stock.ProductID, &stock.StockLeft, &stock.ImmunizationSchedule)
+		&stock.ExpiryDate, &stock.ProductID, &stock.StockLeft, &stock.ImmunizationSchedule, &stock.AuthorizedInterval)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
