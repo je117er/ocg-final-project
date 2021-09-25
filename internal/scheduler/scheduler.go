@@ -29,7 +29,7 @@ func NewScheduler(ctx context.Context, db *sql.DB, producer *rabbitmq.Producer) 
 
 func (scheduler *Scheduler) Start() {
 	logger.Info("Start scheduler...")
-	scheduler.cron.AddFunc(" 0 * * * *", scheduler.schedulerJob)
+	scheduler.cron.AddFunc("10 * * * * *", scheduler.schedulerJob)
 	scheduler.producer.Start()
 	scheduler.cron.Start()
 }
