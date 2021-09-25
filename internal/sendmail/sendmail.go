@@ -1,6 +1,7 @@
 package sendmail
 
 import (
+	"github.com/je117er/ocg-final-project/internal/utils"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
@@ -17,6 +18,8 @@ const (
 					<strong>Admin</strong>`
 )
 
+var logger = utils.SugarLog()
+
 func SendEmailThankYou(toUsername, toEmail string) (int, error) {
 	from := mail.NewEmail(fromName, fromAddress)
 	to := mail.NewEmail(toUsername, toEmail)
@@ -28,6 +31,7 @@ func SendEmailThankYou(toUsername, toEmail string) (int, error) {
 		return -1, err
 
 	}
+	logger.Info(response)
 
 	return response.StatusCode, nil
 }
