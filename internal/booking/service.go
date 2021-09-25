@@ -8,4 +8,5 @@ import (
 type Service interface {
 	GetVaccinationByCustomerID(ctx context.Context, customerID int) ([]models.VaccinationResponse, error)
 	UpdateCustomer(ctx context.Context, customer models.VaccinationRequest) ([]models.VaccinationResponse, error)
+	InsertOrder(ctx context.Context, r models.OrderRequest) error
 }

@@ -108,6 +108,7 @@ value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 		r.CustomerOrderRequest.Nationality,
 	)
 	if err != nil {
+		logger.Error(err)
 		tx.Rollback()
 		return err
 	}
@@ -118,6 +119,7 @@ VALUES (?, ?, ?, @customerID);`
 	for _, req := range conditionReq {
 		_, err := tx.ExecContext(ctx, query, req.Code, req.Description, req.ConditionStatus)
 		if err != nil {
+			logger.Error(err)
 			tx.Rollback()
 			return nil
 		}
@@ -145,6 +147,7 @@ VALUES (?, ?, ?, @customerID);`
 		r.StockItemID,
 	)
 	if err != nil {
+		logger.Error(err)
 		tx.Rollback()
 		return err
 	}
@@ -154,6 +157,7 @@ set slot_left = slot_left - 1
 where id = ?`
 	_, err = tx.ExecContext(ctx, query, r.SessionCapacityID)
 	if err != nil {
+		logger.Error(err)
 		tx.Rollback()
 		return err
 	}
@@ -163,11 +167,13 @@ set stock_left = stock_left - 1
 where id = ?`
 	_, err = tx.ExecContext(ctx, query, r.StockItemID)
 	if err != nil {
+		logger.Error(err)
 		tx.Rollback()
 		return err
 	}
 
 	if err := tx.Commit(); err != nil {
+		logger.Error(err)
 		return err
 	}
 	return nil

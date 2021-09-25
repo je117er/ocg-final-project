@@ -84,7 +84,7 @@ func InitServer() error {
 	s.Use(middleware.JWTVerify)
 
 	customerController.NewAdminCustomerController(customerServ, ctx, s)
-	clinicController.NewAdminClinicController(clinicServ, ctx, r)
+	clinicController.NewAdminClinicController(clinicServ, ctx, s)
 	clinicController.NewClinicController(clinicServ, ctx, s)
 	sessionController.NewAdminSessionController(sessionServ, ctx, s)
 	conditionController.NewConditionController(conditionServ, ctx, s)
@@ -93,7 +93,6 @@ func InitServer() error {
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
 	// references: https://github.com/rs/cors
-
 
 	handler := cors.AllowAll().Handler(r)
 
