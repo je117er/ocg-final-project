@@ -76,8 +76,8 @@ where si.name like ?;
 	}
 	defer rows.Close()
 	responses := make([]*models.ClinicByVaccine, 0)
-	response := new(models.ClinicByVaccine)
 	for rows.Next() {
+		response := new(models.ClinicByVaccine)
 		if err := rows.Scan(&response.ClinicName, &response.StockItemID, &response.StockName, &response.AuthorizedInterval, &response.LotNumber, &response.Price); err != nil {
 			logger.Error(err)
 			continue

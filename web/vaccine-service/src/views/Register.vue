@@ -77,7 +77,7 @@
             </b-table>
           </tab-content>
           <tab-content
-            title="Choose a vaccine"
+            title="Order Info"
             icon="ti-user"
             >
             <div class="tile is-ancestor">
@@ -88,24 +88,126 @@
               <div class="tile is-parent">
                 <article class="tile is-child">
                   <b-field label="Vaccine" class="has-text-left" position="is-centered">
-                    <b-select placeholder="Select a vaccine" v-model="selectedProduct">
+                    <b-select
+                      placeholder="Select a vaccine"
+                      v-model="selectedProduct"
+                      >
                       <option
                         v-for="product in productList"
-                        :value="product.ID"
+                        :value="product.Name"
                         :key="product.ID"
                         >
                        {{ product.Name }}
                       </option>
                     </b-select>
                   </b-field>
+                  <div v-if="clinicList">
+                    <b-field
+                      label="Clinic" class="has-text-left" position="is-centered">
+                      <b-select
+                        placeholder="Select a clinic"
+                        v-model="selectedClinic"
+                      >
+                        <option
+                          v-for="clinic in clinicList"
+                          :value="clinic.clinic_name"
+                          :key="clinic.clinic_name"
+                        >
+                          {{ clinic.clinic_name }}
+                        </option>
+                      </b-select>
+                    </b-field>
+                    <div v-if="selectedClinic">
+                      <b-datepicker v-model="selectedDate"
+                                    inline
+                      >
+                      </b-datepicker>
+                      <b-field label="Session" class="has-text-left" position="is-centered">
+                        <b-select
+                          placeholder="Select a session"
+                          v-model="selectedSession"
+                        >
+                          <option
+                            v-for="session in availableSessions"
+                            :value="session.time_period"
+                            :key="session.ID"
+                          >
+                            {{ session.time_period }}
+                          </option>
+                        </b-select>
+                      </b-field>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <p class="is-danger">
+                      Currently {{selectedProduct}} vaccines are running out of stock at all clinics
+                    </p>
+                  </div>
                 </article>
               </div>
               <div class="tile is-parent">
                 <article class="tile is-child">
-                  {{ selectedProduct}}
+<!--                  {{ selectedProduct}}-->
                 </article>
               </div>
             </div>
+            <section class="section is-medium">
+              <div class="columns">
+                <h5 class="title is-5">1. Personal information</h5>
+              </div>
+              <b-field grouped class="has-text-left">
+                <b-field label="Name" type="name" expanded>
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Date of Birth" expanded>
+                  <b-datepicker
+                    placeholder="Type or select a date"
+                    icon="calendar-today"
+                    editable
+                  >
+                  </b-datepicker>
+                </b-field>
+                <b-field label="Gender">
+                  <b-select>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </b-select>
+
+                </b-field>
+                <b-field label="Phone Number" expanded>
+                  <b-input></b-input>
+                </b-field>
+              </b-field>
+              <b-field class="has-text-left" grouped>
+                <b-field label="Email" type="email">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Insurance Number">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Address" expanded>
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Ethnicity" expanded>
+                  <b-input></b-input>
+                </b-field>
+              </b-field>
+              <b-field class="has-text-left" grouped>
+                <b-field label="Commune">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="District">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="City">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Nationality" expanded>
+                  <b-input></b-input>
+                </b-field>
+              </b-field>
+<!--              </div>-->
+            </section>
           </tab-content>
           <div v-if="errorMsg">
            <span class="error">{{ errorMsg }}</span>
@@ -151,10 +253,54 @@ export default {
       errorMsg: '',
       email: '',
       productList: [],
+      clinicList: [],
       selectedProduct: '',
+      selectedClinic: '',
+      selectedDate: new Date(),
+      dateStr: '',
+      availableSessions: [],
+      dateList: [],
+      unselectableDates: [],
+      selectedSession: 0,
     };
   },
+  watch: {
+    selectedProduct() {
+      Vue.axios.get(`http://localhost:8088/clinic?vaccineName=${this.selectedProduct}`).then((response) => {
+        this.clinicList = response.data;
+        console.log(response.data);
+      })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    selectedClinic() {
+      Vue.axios.get(`http://localhost:8088/session?clinicName=${this.selectedClinic}`).then((response) => {
+        this.dateList = response.data;
+        this.dateStr = this.dateList[0].current_date.slice(0, 10);
+        this.selectedDate = new Date(this.dateStr);
+        console.log(this.selectedDate);
+        console.log(String(this.selectedDate));
+        // eslint-disable-next-line max-len
+        // this.availableSessions = this.dateList.filter((e) => dateStr === e.current_date.slice(0, 10));
+        this.getDateList();
+        console.log(JSON.stringify(this.availableSessions));
+        console.log(response.data);
+      })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    selectedDate() {
+      this.getDateList();
+    },
+  },
   methods: {
+    getDateList() {
+      // erroneous code :))
+      // eslint-disable-next-line max-len
+      this.availableSessions = this.dateList.filter((e) => this.dateStr === e.current_date.slice(0, 10));
+    },
     onComplete() {
       alert('yay!');
     },
