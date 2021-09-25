@@ -1,9 +1,9 @@
 <template>
   <b-tabs>
     <b-tab-item label="Personal Information" icon="">
-      <template v-if="!loaded">Loading..</template>
-      <template v-else>
+      <template>
         <section class="section is-medium">
+          <h2 v-if="isInfoUpdated" style="color: darkgreen; font-weight: bold;">Update success!</h2>
           <b-field grouped class="has-text-left">
             <b-field label="Name" type="name" expanded>
               <b-input v-model="customer.name"></b-input>
@@ -94,7 +94,8 @@
     </b-tab-item>
     <b-tab-item label="Vaccination" icon="">
       <section>
-        <h2 v-if="isVaccinationUpdated">Update success!</h2>
+        <h2 v-if="isVaccinationUpdated" style="color: darkgreen; font-weight: bold;">Update
+          success!</h2>
         <b-table
           :paginated=true
           :per-page=10
@@ -155,6 +156,7 @@ export default {
       vaccination: [],
       loaded: false,
       isVaccinationUpdated: false,
+      isInfoUpdated: false,
     };
   },
   methods: {
@@ -163,6 +165,7 @@ export default {
       Vue.axios.put('http://localhost:8088/admin/customer', this.customer).then((response) => {
         this.customer = response.data;
         this.loaded = true;
+        this.isInfoUpdated = true;
       }).catch((err) => {
         console.log(err);
       });

@@ -1,4 +1,3 @@
-{"level":"[INFO]","time":"2021-09-25 11:08:15","caller":"server/server.go:43","message":"Start server ..."}
-.."}
-"}
-time":"2021-09-25 11:08:15","caller":"cmd/main.go:57","message":"Start application..."}
+{"level":"[ERROR]","time":"2021-09-25 12:04:49","caller":"controller/customer_controlller.go:58","message":"Email th{"level":"[INFO]","time":"2021-09-25 12:05:10","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 12:06:10","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}
+{"level":"[INFO]","time":"2021-09-25 12:07:10","caller":"scheduler/scheduler.go:38","message":"Scan to email...."}

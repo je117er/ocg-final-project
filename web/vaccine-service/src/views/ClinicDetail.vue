@@ -32,6 +32,7 @@
     </b-tab-item>
     <b-tab-item label="Work Schedule" icon="">
       <div class="container">
+        <h2 v-if="isUpdateSession" style="color: darkgreen; font-weight: bold;">Update Success!</h2>
         <div class="notification">
           <b-datepicker v-model="currentDateUI"
                         inline
@@ -109,6 +110,7 @@ export default {
       afternoonCapacity: 100,
       eveningStatus: true,
       eveningCapacity: 100,
+      isUpdateSession: false,
     };
   },
   watch: {
@@ -230,6 +232,7 @@ export default {
       Vue.axios.put('http://localhost:8088/admin/session', currentData).then(() => {
         this.loaded = true;
         this.isFetchSession = true;
+        this.isUpdateSession = true;
       }).catch((err) => {
         console.log(err);
         this.isFetchSession = true;
