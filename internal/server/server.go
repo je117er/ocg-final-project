@@ -78,6 +78,7 @@ func InitServer() error {
 	adminController.NewAdminController(adminServ, ctx, r)
 	sessionController.NewSessionController(sessionServ, ctx, r)
 	clinicController.NewClinicController(clinicServ, ctx, r)
+	bookingController.NewBookingController(bookingServ, ctx, r)
 
 	// Admin
 	s := r.PathPrefix("/admin").Subrouter()
@@ -88,7 +89,7 @@ func InitServer() error {
 	clinicController.NewClinicController(clinicServ, ctx, s)
 	sessionController.NewAdminSessionController(sessionServ, ctx, s)
 	conditionController.NewConditionController(conditionServ, ctx, s)
-	bookingController.NewBookingController(bookingServ, ctx, s)
+	bookingController.NewAdminBookingController(bookingServ, ctx, s)
 
 	// cors.Default() sets up the middleware with default options being
 	// all origins accepted with simple methods (GET, POST)
