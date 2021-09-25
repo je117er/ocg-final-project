@@ -91,7 +91,7 @@
                     <b-select
                       placeholder="Select a vaccine"
                       v-model="selectedProduct"
-                      @change="fetchClinics">
+                      >
                       <option
                         v-for="product in productList"
                         :value="product.Name"
@@ -101,7 +101,7 @@
                       </option>
                     </b-select>
                   </b-field>
-                  <div v-if="productList">
+                  <div v-if="clinicList">
                     <b-field
                       label="Clinic" class="has-text-left" position="is-centered">
                       <b-select
@@ -110,13 +110,18 @@
                       >
                         <option
                           v-for="clinic in clinicList"
-                          :value="clinic.Name"
-                          :key="clinic.Name"
+                          :value="clinic.clinic_name"
+                          :key="clinic.clinic_name"
                         >
-                          {{ clinic.Name }}
+                          {{ clinic.clinic_name }}
                         </option>
                       </b-select>
                     </b-field>
+                  </div>
+                  <div v-else>
+                    <p class="is-danger">
+                      Currently {{selectedProduct}} vaccines are running out of stock at all clinics
+                    </p>
                   </div>
                 </article>
               </div>
@@ -233,6 +238,17 @@ export default {
       selectedClinic: '',
     };
   },
+  watch: {
+    selectedProduct() {
+      Vue.axios.get(`http://localhost:8088/clinic?vaccineName=${this.selectedProduct}`).then((response) => {
+        this.clinicList = response.data;
+        console.log(response.data);
+      })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+  },
   methods: {
     onComplete() {
       alert('yay!');
@@ -260,19 +276,6 @@ export default {
           reject(new Error('No email was supplied!'));
         }
       });
-    },
-    fetchClinics() {
-      Vue.axios.get(`http://localhost:8088/clinic?vaccineName=${this.selectedProduct}`).then((emailResponse) => {
-        this.constraints = emailResponse.data;
-        this.conditions = this.constraints.map((e) => ({
-          id: e.ID,
-          description: e.Description,
-          selected: 1,
-        }));
-      })
-        .catch((e) => {
-          console.log(e);
-        });
     },
     fetchProductList() {
       Vue.axios.get('http://localhost:8088/constraints').then((emailResponse) => {

@@ -1,9 +1,15 @@
-{"level":"[ERROR]","time":"2021-09-25 11:31:14","caller":"controller/customer_controlller.go:58","message":"Email jljlkjlkj not exist"}
-{"level":"[ERROR]","time":"2021-09-25 11:41:03","caller":"controller/customer_controlller.go:58","message":"Email jlkjlkjl not exist"}
-{"level":"[ERROR]","time":"2021-09-25 11:41:55","caller":"controller/customer_controlller.go:58","message":"Email jljkl not exist"}
-{"level":"[ERROR]","time":"2021-09-25 11:42:25","caller":"controller/customer_controlller.go:58","message":"Email jklj not exist"}
-{"level":"[ERROR]","time":"2021-09-25 12:04:44","caller":"controller/customer_controlller.go:58","message":"Email jljkljl not exist"}
-{"level":"[ERROR]","time":"2021-09-25 12:06:01","caller":"controller/customer_controlller.go:58","message":"Email jljljhljl not exist"}
-{"level":"[ERROR]","time":"2021-09-25 12:10:04","caller":"controller/customer_controlller.go:58","message":"Email jljlj not exist"}
-{"level":"[ERROR]","time":"2021-09-25 12:11:30","caller":"controller/customer_controlller.go:58","message":"Email jljk not exist"}
-rows in result set"}
+{"level":"[ERROR]","time":"2021-09-25 13:03:29","caller":"controller/customer_controlller.go:58","message":"Email 646546 not exist"}
+{"level":"[ERROR]","time":"2021-09-25 13:10:03","caller":"controller/customer_controlller.go:58","message":"Email  not exist"}
+esult set"}
+ository.go:72","message":"&{0xc000296000 0x4d5920 0xc00028c780 <nil> 0xc00029c540 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:07:53","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc0000a7450 <nil> 0xc0000aca80 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:07:57","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc0000a7540 <nil> 0xc0000acb80 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:07:59","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc0000a75e0 <nil> 0xc0000acc00 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:08:17","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc0000a77c0 <nil> 0xc0000acc80 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:08:18","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc000242230 <nil> 0xc000226380 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:08:20","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc000242410 <nil> 0xc0002263c0 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:08:23","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc0002424b0 <nil> 0xc000226440 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:10:08","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc000242b90 <nil> 0xc000226840 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:10:15","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc0000a7900 <nil> 0xc0000ace00 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:10:58","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc00028cb90 <nil> 0xc00029c980 {{0 0} 0 0 0 0} false <nil> []}"}
+{"level":"[INFO]","time":"2021-09-25 13:11:00","caller":"repository/clinic_repository.go:72","message":"&{0xc000296000 0x4d5920 0xc00028cd70 <nil> 0xc00029c9c0 {{0 0} 0 0 0 0} false <nil> []}"}
