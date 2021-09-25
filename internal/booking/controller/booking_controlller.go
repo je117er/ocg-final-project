@@ -20,8 +20,8 @@ var logger = utils.SugarLog()
 
 func NewBookingController(service booking.Service, ctx context.Context, router *mux.Router) {
 	controller := BookingController{service, ctx}
-	router.Methods(http.MethodGet).Path("/admin/booking").Queries("customerID", "{customerID}").HandlerFunc(controller.GetVaccinationByCustomerID)
-	router.Methods(http.MethodPut).Path("/admin/booking").HandlerFunc(controller.UpdateDoesVaccination)
+	router.Methods(http.MethodGet).Path("/booking").Queries("customerID", "{customerID}").HandlerFunc(controller.GetVaccinationByCustomerID)
+	router.Methods(http.MethodPut).Path("/booking").HandlerFunc(controller.UpdateDoesVaccination)
 }
 
 func (controller *BookingController) GetVaccinationByCustomerID(w http.ResponseWriter, r *http.Request) {

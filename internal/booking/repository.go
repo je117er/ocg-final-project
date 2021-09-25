@@ -10,4 +10,5 @@ type Repository interface {
 	GetByID(ctx context.Context, id int) (*models.Booking, error)
 	UpdateCompleted(ctx context.Context, id int, completed int) error
 	InsertOrder(ctx context.Context, r models.OrderRequest) error
+	UpdateIsSendRemindEmail(ctx context.Context, id int) error
 }

@@ -13,4 +13,5 @@ type Repository interface {
 	Update(ctx context.Context, customer models.CustomerRequest) (*models.Customer, error)
 	GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error)
 	GetAllByClinicID(ctx context.Context, id string) ([]*models.Customer, error)
+	GetUnSendEmails(ctx context.Context, intervalDay int, limit int) ([]*models.SentMail, error)
 }
