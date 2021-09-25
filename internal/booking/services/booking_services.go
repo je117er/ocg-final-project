@@ -19,6 +19,15 @@ func NewBookingService(bookingRepository booking.Repository, sockRepository stoc
 
 var logger = utils.SugarLog()
 
+func (service *BookingService) InsertOrder(ctx context.Context, r models.OrderRequest) error {
+	err := service.InsertOrder(ctx, r)
+	if err != nil {
+		logger.Error(err)
+		return err
+	}
+	return nil
+}
+
 func (service *BookingService) GetVaccinationByCustomerID(ctx context.Context, customerID int) ([]models.VaccinationResponse, error) {
 	res, err := service.BookingRepository.GetByCustomerID(ctx, customerID)
 	if err != nil {
