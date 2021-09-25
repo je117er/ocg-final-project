@@ -1,4 +1,9 @@
-{"level":"[INFO]","time":"2021-09-25 11:08:15","caller":"server/server.go:43","message":"Start server ..."}
-.."}
-"}
-time":"2021-09-25 11:08:15","caller":"cmd/main.go:57","message":"Start application..."}
+{"level":"[ERROR]","time":"2021-09-25 11:31:14","caller":"controller/customer_controlller.go:58","message":"Email jljlkjlkj not exist"}
+{"level":"[ERROR]","time":"2021-09-25 11:41:03","caller":"controller/customer_controlller.go:58","message":"Email jlkjlkjl not exist"}
+{"level":"[ERROR]","time":"2021-09-25 11:41:55","caller":"controller/customer_controlller.go:58","message":"Email jljkl not exist"}
+{"level":"[ERROR]","time":"2021-09-25 11:42:25","caller":"controller/customer_controlller.go:58","message":"Email jklj not exist"}
+{"level":"[ERROR]","time":"2021-09-25 12:04:44","caller":"controller/customer_controlller.go:58","message":"Email jljkljl not exist"}
+{"level":"[ERROR]","time":"2021-09-25 12:06:01","caller":"controller/customer_controlller.go:58","message":"Email jljljhljl not exist"}
+{"level":"[ERROR]","time":"2021-09-25 12:10:04","caller":"controller/customer_controlller.go:58","message":"Email jljlj not exist"}
+{"level":"[ERROR]","time":"2021-09-25 12:11:30","caller":"controller/customer_controlller.go:58","message":"Email jljk not exist"}
+rows in result set"}

@@ -77,7 +77,7 @@
             </b-table>
           </tab-content>
           <tab-content
-            title="Choose a vaccine"
+            title="Order Info"
             icon="ti-user"
             >
             <div class="tile is-ancestor">
@@ -88,16 +88,36 @@
               <div class="tile is-parent">
                 <article class="tile is-child">
                   <b-field label="Vaccine" class="has-text-left" position="is-centered">
-                    <b-select placeholder="Select a vaccine" v-model="selectedProduct">
+                    <b-select
+                      placeholder="Select a vaccine"
+                      v-model="selectedProduct"
+                      @change="fetchClinics">
                       <option
                         v-for="product in productList"
-                        :value="product.ID"
+                        :value="product.Name"
                         :key="product.ID"
                         >
                        {{ product.Name }}
                       </option>
                     </b-select>
                   </b-field>
+                  <div v-if="productList">
+                    <b-field
+                      label="Clinic" class="has-text-left" position="is-centered">
+                      <b-select
+                        placeholder="Select a clinic"
+                        v-model="selectedClinic"
+                      >
+                        <option
+                          v-for="clinic in clinicList"
+                          :value="clinic.Name"
+                          :key="clinic.Name"
+                        >
+                          {{ clinic.Name }}
+                        </option>
+                      </b-select>
+                    </b-field>
+                  </div>
                 </article>
               </div>
               <div class="tile is-parent">
@@ -106,6 +126,63 @@
                 </article>
               </div>
             </div>
+            <section class="section is-medium">
+              <div class="columns">
+                <h5 class="title is-5">1. Personal information</h5>
+              </div>
+              <b-field grouped class="has-text-left">
+                <b-field label="Name" type="name" expanded>
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Date of Birth" expanded>
+                  <b-datepicker
+                    placeholder="Type or select a date"
+                    icon="calendar-today"
+                    editable
+                  >
+                  </b-datepicker>
+                </b-field>
+                <b-field label="Gender">
+                  <b-select>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </b-select>
+
+                </b-field>
+                <b-field label="Phone Number" expanded>
+                  <b-input></b-input>
+                </b-field>
+              </b-field>
+              <b-field class="has-text-left" grouped>
+                <b-field label="Email" type="email">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Insurance Number">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Address" expanded>
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Ethnicity" expanded>
+                  <b-input></b-input>
+                </b-field>
+              </b-field>
+              <b-field class="has-text-left" grouped>
+                <b-field label="Commune">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="District">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="City">
+                  <b-input></b-input>
+                </b-field>
+                <b-field label="Nationality" expanded>
+                  <b-input></b-input>
+                </b-field>
+              </b-field>
+<!--              </div>-->
+            </section>
           </tab-content>
           <div v-if="errorMsg">
            <span class="error">{{ errorMsg }}</span>
@@ -151,7 +228,9 @@ export default {
       errorMsg: '',
       email: '',
       productList: [],
+      clinicList: [],
       selectedProduct: '',
+      selectedClinic: '',
     };
   },
   methods: {
@@ -181,6 +260,19 @@ export default {
           reject(new Error('No email was supplied!'));
         }
       });
+    },
+    fetchClinics() {
+      Vue.axios.get(`http://localhost:8088/clinic?vaccineName=${this.selectedProduct}`).then((emailResponse) => {
+        this.constraints = emailResponse.data;
+        this.conditions = this.constraints.map((e) => ({
+          id: e.ID,
+          description: e.Description,
+          selected: 1,
+        }));
+      })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     fetchProductList() {
       Vue.axios.get('http://localhost:8088/constraints').then((emailResponse) => {
