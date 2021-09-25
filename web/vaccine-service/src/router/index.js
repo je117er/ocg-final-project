@@ -40,6 +40,11 @@ const routes = [
     name: 'clinic-detail',
     component: () => import('../views/ClinicDetail.vue'),
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue'),
+  },
 ];
 
 const router = new VueRouter({

@@ -173,3 +173,35 @@ func (repository *CustomerRepository) GetAllByClinicID(ctx context.Context, id s
 
 	return repository.fetch(ctx, query, id)
 }
+
+func (repository *CustomerRepository) GetUnSendEmails(ctx context.Context, intervalDay int, limit int) ([]*models.SentMail, error) {
+	query := `SELECT c.email, b.id
+				FROM customer c
+						 INNER JOIN booking b ON c.id = b.customer_id
+				WHERE b.doses_completed = 1
+				  AND b.sent_reminder_email = 0
+				  AND date_booked = date_add(current_date(), INTERVAL ? DAY)
+				LIMIT ?`
+
+	rows, err := repository.conn.QueryContext(ctx, query, intervalDay, limit)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	result := make([]*models.SentMail, 0)
+	for rows.Next() {
+		sendMail := new(models.SentMail)
+		err := rows.Scan(&sendMail.Email, &sendMail.BookingID)
+		if err != nil {
+			logger.Error(err)
+			return nil, err
+		}
+
+		result = append(result, sendMail)
+	}
+
+	return result, nil
+}

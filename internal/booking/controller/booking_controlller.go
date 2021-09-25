@@ -33,6 +33,8 @@ func NewBookingController(service booking.Service, ctx context.Context, router *
 	router.Methods(http.MethodPut).Path("/admin/booking").HandlerFunc(controller.UpdateDoesVaccination)
 	router.Methods(http.MethodPost).Path("/order").HandlerFunc(controller.PostOrder)
 	router.Methods(http.MethodPost).Path("/create-checkout-session").HandlerFunc(controller.CreateCheckoutSession)
+	router.Methods(http.MethodGet).Path("/booking").Queries("customerID", "{customerID}").HandlerFunc(controller.GetVaccinationByCustomerID)
+	router.Methods(http.MethodPut).Path("/booking").HandlerFunc(controller.UpdateDoesVaccination)
 }
 
 func (controller BookingController) CreateCheckoutSession(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +84,6 @@ func (controller BookingController) PostOrder(w http.ResponseWriter, r *http.Req
 	}
 
 	utils.ResponseWithJson(w, http.StatusAccepted, SuccessOrderMessage{Message: "Success placing an order!"})
-}
 
 func (controller *BookingController) GetVaccinationByCustomerID(w http.ResponseWriter, r *http.Request) {
 	customerID, err := strconv.Atoi(r.URL.Query().Get("customerID"))

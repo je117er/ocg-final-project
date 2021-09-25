@@ -15,4 +15,5 @@ type StockItem struct {
 	ProductID            sql.NullString
 	StockLeft            sql.NullInt32
 	ImmunizationSchedule sql.NullInt64
+	AuthorizedInterval   sql.NullInt64
 }

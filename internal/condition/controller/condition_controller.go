@@ -18,7 +18,7 @@ var logger = utils.SugarLog()
 
 func NewConditionController(service condition.Service, ctx context.Context, router *mux.Router) {
 	controller := ConditionController{service, ctx}
-	router.Methods(http.MethodGet).Path("/admin/medicalHistory").Queries("customerID", "{customerID}").HandlerFunc(controller.GetMedicalHistory)
+	router.Methods(http.MethodGet).Path("/medicalHistory").Queries("customerID", "{customerID}").HandlerFunc(controller.GetMedicalHistory)
 }
 
 func (controller *ConditionController) GetMedicalHistory(w http.ResponseWriter, r *http.Request) {

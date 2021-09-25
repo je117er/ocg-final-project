@@ -29,7 +29,7 @@ func (repository *BookingRepository) getOne(ctx context.Context, query string, a
 	row := stmt.QueryRowContext(ctx, args...)
 	booking := &models.Booking{}
 	err = row.Scan(&booking.ID, &booking.CustomerID, &booking.DateRegistered, &booking.DateBooked, &booking.TimePeriod, &booking.DosesCompleted,
-		&booking.VaccineName, &booking.ExtendedInterval, &booking.LotNumber, &booking.ClinicName, &booking.Price, &booking.SentReminderEmail, &booking.SessionCapacityID,
+		&booking.VaccineName, &booking.AuthorizedInterval, &booking.LotNumber, &booking.ClinicName, &booking.Price, &booking.SentReminderEmail, &booking.SessionCapacityID,
 		&booking.TotalBill, &booking.PaymentStatus, &booking.StockItemID)
 	if err != nil {
 		logger.Error(err)
@@ -52,7 +52,7 @@ func (repository *BookingRepository) fetch(ctx context.Context, query string, ar
 	for rows.Next() {
 		booking := new(models.Booking)
 		err := rows.Scan(&booking.ID, &booking.CustomerID, &booking.DateRegistered, &booking.DateBooked, &booking.TimePeriod, &booking.DosesCompleted,
-			&booking.VaccineName, &booking.ExtendedInterval, &booking.LotNumber, &booking.ClinicName, &booking.Price, &booking.SentReminderEmail, &booking.SessionCapacityID,
+			&booking.VaccineName, &booking.AuthorizedInterval, &booking.LotNumber, &booking.ClinicName, &booking.Price, &booking.SentReminderEmail, &booking.SessionCapacityID,
 			&booking.TotalBill, &booking.PaymentStatus, &booking.StockItemID)
 		if err != nil {
 			logger.Error(err)
@@ -187,6 +187,28 @@ func (repository *BookingRepository) UpdateCompleted(ctx context.Context, id int
 	}
 
 	res, err := stmt.ExecContext(ctx, completed, id)
+	if err != nil {
+		logger.Error(err)
+		return err
+	}
+	_, err = res.RowsAffected()
+	if err != nil {
+		logger.Error(err)
+		return err
+	}
+
+	return nil
+}
+
+func (repository *BookingRepository) UpdateIsSendRemindEmail(ctx context.Context, id int) error {
+	query := `UPDATE booking SET sent_reminder_email = ? WHERE id =?`
+	stmt, err := repository.conn.PrepareContext(ctx, query)
+	if err != nil {
+		logger.Error(err)
+		return err
+	}
+
+	res, err := stmt.ExecContext(ctx, 1, id)
 	if err != nil {
 		logger.Error(err)
 		return err
