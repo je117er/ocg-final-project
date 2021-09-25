@@ -49,15 +49,16 @@ func (repository *SessionRepository) fetch(ctx context.Context, query string, ar
 func (repository *SessionRepository) GetSessionByClinic(ctx context.Context, clinicName string) ([]*models.SessionByClinic, error) {
 	query := `select c.id, s.id as session_id, s.type as time_period, s.current_date from session_capacity as s
 		join clinic c on s.clinic_id = c.id
-		where s.slot_left <> 0 && s.status <> 0 && c.name like ?;`
-	rows, err := repository.conn.QueryContext(ctx, query, clinicName)
+		where s.slot_left > 0 && s.status <> 0 && c.name like ?`
+	logger.Info(query)
+	rows, err := repository.conn.QueryContext(ctx, query, "%" + clinicName + "%")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	results := make([]*models.SessionByClinic, 0)
-	result := new(models.SessionByClinic)
 	for rows.Next() {
+		result := new(models.SessionByClinic)
 		if err := rows.Scan(&result.ClinicID, &result.SessionID, &result.TimePeriod, &result.CurrentDate); err != nil {
 			logger.Error(err)
 			continue
@@ -65,6 +66,7 @@ func (repository *SessionRepository) GetSessionByClinic(ctx context.Context, cli
 		results = append(results, result)
 	}
 	if err := rows.Err(); err != nil {
+		logger.Error(err)
 		return nil, err
 	}
 	return results, nil

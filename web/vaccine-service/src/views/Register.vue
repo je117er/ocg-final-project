@@ -117,6 +117,26 @@
                         </option>
                       </b-select>
                     </b-field>
+                    <div v-if="selectedClinic">
+                      <b-datepicker v-model="selectedDate"
+                                    inline
+                      >
+                      </b-datepicker>
+                      <b-field label="Session" class="has-text-left" position="is-centered">
+                        <b-select
+                          placeholder="Select a session"
+                          v-model="selectedSession"
+                        >
+                          <option
+                            v-for="session in availableSessions"
+                            :value="session.time_period"
+                            :key="session.ID"
+                          >
+                            {{ session.time_period }}
+                          </option>
+                        </b-select>
+                      </b-field>
+                    </div>
                   </div>
                   <div v-else>
                     <p class="is-danger">
@@ -127,7 +147,7 @@
               </div>
               <div class="tile is-parent">
                 <article class="tile is-child">
-                  {{ selectedProduct}}
+<!--                  {{ selectedProduct}}-->
                 </article>
               </div>
             </div>
@@ -236,6 +256,12 @@ export default {
       clinicList: [],
       selectedProduct: '',
       selectedClinic: '',
+      selectedDate: new Date(),
+      dateStr: '',
+      availableSessions: [],
+      dateList: [],
+      unselectableDates: [],
+      selectedSession: 0,
     };
   },
   watch: {
@@ -248,8 +274,33 @@ export default {
           console.log(e);
         });
     },
+    selectedClinic() {
+      Vue.axios.get(`http://localhost:8088/session?clinicName=${this.selectedClinic}`).then((response) => {
+        this.dateList = response.data;
+        this.dateStr = this.dateList[0].current_date.slice(0, 10);
+        this.selectedDate = new Date(this.dateStr);
+        console.log(this.selectedDate);
+        console.log(String(this.selectedDate));
+        // eslint-disable-next-line max-len
+        // this.availableSessions = this.dateList.filter((e) => dateStr === e.current_date.slice(0, 10));
+        this.getDateList();
+        console.log(JSON.stringify(this.availableSessions));
+        console.log(response.data);
+      })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    selectedDate() {
+      this.getDateList();
+    },
   },
   methods: {
+    getDateList() {
+      // erroneous code :))
+      // eslint-disable-next-line max-len
+      this.availableSessions = this.dateList.filter((e) => this.dateStr === e.current_date.slice(0, 10));
+    },
     onComplete() {
       alert('yay!');
     },
