@@ -174,16 +174,22 @@ func (repository *CustomerRepository) GetAllByClinicID(ctx context.Context, id s
 	return repository.fetch(ctx, query, id)
 }
 
-func (repository *CustomerRepository) GetUnSendEmails(ctx context.Context, intervalDay int, limit int) ([]*models.SentMail, error) {
-	query := `SELECT c.email, b.id
-				FROM customer c
-						 INNER JOIN booking b ON c.id = b.customer_id
-				WHERE b.doses_completed = 1
-				  AND b.sent_reminder_email = 0
-				  AND date_booked = date_add(current_date(), INTERVAL ? DAY)
-				LIMIT ?`
+func (repository *CustomerRepository) GetUnSendEmails(ctx context.Context, limit int) ([]*models.SentMail, error) {
+	query := `SELECT c.email, b.id as booking_id, b.clinic_name,  c.name,
+				   CASE b.time_period
+					   WHEN 0 THEN 'Morning'
+					   WHEN 1 THEN 'Afternoon'
+					   WHEN 2 THEN 'Evening'
+					   ELSE 'Every'
+					   END AS time_period,
+				   date_add(b.date_booked, INTERVAL b.authorized_interval DAY) AS date
+			FROM customer c INNER JOIN booking b ON c.id = b.customer_id
+			WHERE b.doses_completed = 1
+			  AND b.sent_reminder_email = 0
+			  AND current_date() = date_add(b.date_booked, INTERVAL (b.authorized_interval - 1) DAY)
+			ORDER BY b.date_registered LIMIT ?;`
 
-	rows, err := repository.conn.QueryContext(ctx, query, intervalDay, limit)
+	rows, err := repository.conn.QueryContext(ctx, query, limit)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
@@ -194,7 +200,7 @@ func (repository *CustomerRepository) GetUnSendEmails(ctx context.Context, inter
 	result := make([]*models.SentMail, 0)
 	for rows.Next() {
 		sendMail := new(models.SentMail)
-		err := rows.Scan(&sendMail.Email, &sendMail.BookingID)
+		err := rows.Scan(&sendMail.Email, &sendMail.BookingID, &sendMail.ClinicName, &sendMail.Name, &sendMail.TimePeriod, &sendMail.Date)
 		if err != nil {
 			logger.Error(err)
 			return nil, err

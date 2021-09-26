@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/je117er/ocg-final-project/internal/models"
 	"github.com/je117er/ocg-final-project/internal/rabbitmq"
 	"github.com/je117er/ocg-final-project/internal/scheduler"
 	"github.com/je117er/ocg-final-project/internal/server"
@@ -24,10 +25,10 @@ func init() {
 
 	ctx := context.Background()
 	rmqURI := fmt.Sprintf("amqp://%s:%s@%s:%d", "admin", "123456Aa@", "localhost", 5672)
-	exch := "order"
+	exch := "injection"
 	exchType := "direct"
-	queue := "order_processor"
-	routingKey := ""
+	queue := "injection_schedule"
+	routingKey := "injection_schedule"
 
 	// connect to rabbitmq
 	rmq := rabbitmq.NewRMQ(rmqURI)
@@ -45,11 +46,14 @@ func init() {
 		return
 	}
 
-	producer := rabbitmq.NewProducer(ctx, pCh, exch, exchType, routingKey)
+	dataChan := make(chan *models.SentMail)
+	producer := rabbitmq.NewProducer(ctx, pCh, exch, exchType, routingKey, dataChan)
 	consumer := rabbitmq.NewConsumer(ctx, cCh, exch, exchType, routingKey, queue, db)
 
-	scheduler := scheduler.NewScheduler(ctx, db, producer)
+	scheduler := scheduler.NewScheduler(ctx, db, dataChan)
 	go scheduler.Start()
+
+	go producer.Start()
 	go consumer.Start()
 }
 

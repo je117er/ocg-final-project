@@ -92,7 +92,7 @@ func (consumer *Consumer) Start() {
 			mess.Ack(false)
 			var sendMail models.SentMail
 			_ = json.Unmarshal(mess.Body, &sendMail)
-			_, err := sendmail.SendEmailThankYou(sendMail.Email, sendMail.Email)
+			_, err := sendmail.SendEmailThankYou(sendMail)
 			if err != nil {
 				fmt.Println("error: ", err)
 				continue

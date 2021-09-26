@@ -8,27 +8,33 @@ import (
 )
 
 type Producer struct {
-	ctx context.Context
-	//wg         *sync.WaitGroup
+	ctx        context.Context
 	channel    *amqp.Channel
 	exchange   string
 	exchType   string
 	routingKey string
+	dataChan   <-chan *models.SentMail
 }
 
-func NewProducer(ctx context.Context, channel *amqp.Channel, exchange, exchType, routingKey string) *Producer {
+func NewProducer(ctx context.Context, channel *amqp.Channel, exchange, exchType, routingKey string, dataChan <-chan *models.SentMail) *Producer {
 	return &Producer{
-		ctx: ctx,
-		//wg:         wg,
+		ctx:        ctx,
 		channel:    channel,
 		exchange:   exchange,
 		exchType:   exchType,
 		routingKey: routingKey,
+		dataChan:   dataChan,
 	}
 }
 
 func (producer *Producer) Start() {
+	logger.Info("Start producer...")
 	producer.declare()
+
+	for {
+		data, _ := <-producer.dataChan
+		producer.Public(data)
+	}
 }
 
 func (producer *Producer) Public(sendMail *models.SentMail) error {
