@@ -38,7 +38,7 @@
             :data="conditions"
           >
             <b-table-column field="id" label="ID" centered v-slot="props">
-              {{ props.row.code}}
+              {{ props.row.code }}
             </b-table-column>
             <b-table-column
               field="description"
@@ -46,17 +46,17 @@
               v-slot="props"
             >
               <div class="has-text-left">
-                {{ props.row.description}}
+                {{ props.row.description }}
               </div>
             </b-table-column>
             <b-table-column field="selected" label="Yes" centered v-slot="props">
               <div class="has-text-right">
-                <input type="radio" id="one" value="1" v-model="props.row.condition_status">
+                <input type="radio" id="one" value=1 v-model="props.row.condition_status">
               </div>
             </b-table-column>
             <b-table-column field="selected" label="No" centered v-slot="props">
               <div class="has-text-right">
-                <input type="radio" id="one" value="0" v-model="props.row.condition_status">
+                <input type="radio" id="one" value=0 v-model="props.row.condition_status">
               </div>
             </b-table-column>
           </b-table>
@@ -93,7 +93,7 @@
                   >
                   </b-datepicker>
                 </b-field>
-                  <b-field label="Select a vaccine" class="has-text-left" position="is-centered">
+                <b-field label="Select a vaccine" class="has-text-left" position="is-centered">
                   <b-select
                     placeholder="Select a vaccine"
                     v-model="selectedProduct"
@@ -142,7 +142,7 @@
                             :value="session.time_period"
                             :key="session.ID"
                           >
-                            {{ sessionType[session.time_period]}}
+                            {{ sessionType[session.time_period] }}
                           </option>
                         </b-select>
                       </b-field>
@@ -151,7 +151,7 @@
                 </div>
                 <div v-else>
                   <p class="is-danger">
-                    Currently {{selectedProduct}} vaccines are running out of stock at all clinics
+                    Currently {{ selectedProduct }} vaccines are running out of stock at all clinics
                   </p>
                 </div>
               </div>
@@ -176,7 +176,7 @@
                   </b-field>
                 </b-field>
                 <b-field class="has-text-left" grouped group-multiline>
-                  <b-field label="Phone Number" >
+                  <b-field label="Phone Number">
                     <b-input v-model="customerInfo.phone_number"></b-input>
                   </b-field>
                   <b-field label="Email" type="email">
@@ -202,31 +202,31 @@
                 </b-field>
               </div>
               <div v-if="selectedProduct" class="tile is-child box">
-               <p class="title">Order Summary</p>
+                <p class="title">Order Summary</p>
                 <ul class="has-text-left is-size-5">
                   <li>
-                    Customer Name: {{customerInfo.customer_name}}
+                    Customer Name: {{ customerInfo.customer_name }}
                   </li>
                   <li>
                     <ul>
                       <li>
-                        Vaccine Name: {{selectedProduct}}
+                        Vaccine Name: {{ selectedProduct }}
                       </li>
                       <li>
-                        Total Price: ${{totalPrice}}
+                        Total Price: ${{ totalPrice }}
                       </li>
                     </ul>
                   </li>
                   <li>
-                    Clinic: {{selectedClinic}}
+                    Clinic: {{ selectedClinic }}
                   </li>
                   <li>
-                    Appointment Date: {{dateStr}}. Session: {{sessionStr}}
+                    Appointment Date: {{ dateStr }}. Session: {{ sessionStr }}
                   </li>
                 </ul>
               </div>
-              </div>
             </div>
+          </div>
         </tab-content>
         <div v-if="errorMsg">
           <span class="error">{{ errorMsg }}</span>
@@ -238,7 +238,7 @@
             <wizard-button
               @click.native="props.nextTab()"
               class="wizard-footer-right finish-button"
-              :style="props.fillButtonStyle">{{props.isLastStep ? 'Check out' : 'Next'}}
+              :style="props.fillButtonStyle">{{ props.isLastStep ? 'Check out' : 'Next' }}
             </wizard-button>
           </div>
         </template>
@@ -384,7 +384,12 @@ export default {
       // eslint-disable-next-line max-len
       const session = this.availableSessions.filter((e) => e.time_period === this.selectedSession)[0];
       const orderRequest = {};
-      orderRequest.condition_order_request = this.conditions;
+      orderRequest.condition_order_request = this.constraints.map((e) => ({
+        code: e.ID,
+        description: e.Description,
+        condition_status: Number(e.condition_status),
+      }));
+
       orderRequest.customer_order_request = this.customerInfo;
       orderRequest.time_period = this.selectedSession;
       orderRequest.doses_completed = 0;
@@ -400,7 +405,7 @@ export default {
       orderRequest.date_registered = new Date();
       orderRequest.date_booked = this.selectedDate;
 
-      Vue.axios.put('http://localhost:8088/order', orderRequest).then((response) => {
+      Vue.axios.post('http://localhost:8088/order', orderRequest).then((response) => {
         console.log(response.data);
       }).catch((e) => {
         console.log(e);
@@ -479,10 +484,10 @@ export default {
 </script>
 
 <style scoped>
-span.error{
-  color:#e74c3c;
-  font-size:20px;
-  display:flex;
-  justify-content:center;
+span.error {
+  color: #e74c3c;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style>
