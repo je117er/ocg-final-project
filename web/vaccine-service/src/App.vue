@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <CustomerHeader/>
-    <router-view/>
-    <CustomerFooter/>
+    <CustomerHeader id="header"/>
+    <div id="content">
+      <router-view/>
+    </div>
+    <CustomerFooter id="footer"/>
   </div>
 </template>
 
@@ -15,17 +17,19 @@
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+#app {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+#content {
+  flex: 1;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+#footer {
+  height: 60px;
 }
 </style>
 <script>

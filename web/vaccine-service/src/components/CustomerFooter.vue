@@ -1,13 +1,11 @@
 <template>
-  <footer class="footer has-background-color-dark ">
-    <div class="content has-text-centered">
-      <div class="contact">
-        <ul>
-          <li><strong>Contact Us</strong></li>
-          <li><strong>COVID-19 Vaccine FAQ</strong></li>
-          <li><strong>Provider Resources </strong></li>
-        </ul>
-      </div>
+  <footer class="footer">
+    <div class="contact">
+      <ul>
+        <li><strong>Contact Us</strong></li>
+        <li><strong>COVID-19 Vaccine FAQ</strong></li>
+        <li><strong>Provider Resources </strong></li>
+      </ul>
       <p><strong>copyright @ 2021</strong></p>
     </div>
   </footer>
@@ -20,27 +18,22 @@ export default {
 </script>
 
 <style scoped>
-.has-background-color-dark {
+
+.footer {
   background: rgb(6, 34, 53);
 }
 
-.contact {
-  margin: 25px auto;
+.contact strong {
+  color: rgb(255, 255, 255);
+  margin: 10px 0;
+
 }
 
-strong {
-  color: rgb(255, 255, 255);
-  margin: 25px auto;
-}
-.contact ul {
+.contact li {
   list-style-type: none;
   margin: 0;
-  padding: 0;
   overflow: hidden;
   display: inline-flex;
-}
-
-li {
-  padding: 16px;
+  padding: 0 16px;
 }
 </style>
