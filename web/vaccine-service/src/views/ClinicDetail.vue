@@ -229,7 +229,7 @@ export default {
         }
       });
       console.log(currentData);
-      Vue.axios.put('http://localhost:8088/admin/session', currentData).then(() => {
+      Vue.axios.post('http://localhost:8088/admin/session', currentData).then(() => {
         this.loaded = true;
         this.isFetchSession = true;
         this.isUpdateSession = true;

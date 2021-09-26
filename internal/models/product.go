@@ -106,16 +106,22 @@ func (p Product) ModelToResponse() *ProductResponse {
 type ProductNameID struct {
 	ID   string
 	Name sql.NullString
+	ImmunizationSchedule int
+	Price int
 }
 
 type ProductNameIDResponse struct {
 	ID   string
 	Name string
+	ImmunizationSchedule int
+	Price int
 }
 
 func (p ProductNameID) ModelToResponse() *ProductNameIDResponse {
 	return &ProductNameIDResponse{
 		ID:   p.ID,
 		Name: p.Name.String,
+		ImmunizationSchedule: p.ImmunizationSchedule,
+		Price: p.Price,
 	}
 }

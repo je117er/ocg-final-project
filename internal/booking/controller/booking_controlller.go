@@ -51,10 +51,10 @@ func (controller BookingController) CreateCheckoutSession(w http.ResponseWriter,
 		return
 	}
 	params := &stripe.CheckoutSessionParams{
-		Customer: stripe.String(string(rune(req.CustomerID))),
+		//Customer: stripe.String(string(rune(req.CustomerID))),
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
-				Price:    stripe.String(string(rune(req.TotalBill))),
+				Price:    stripe.String("price_1JdwFOILBKw97KynN0wP5Gpv"),
 				Quantity: stripe.Int64(int64(req.Quantity)),
 			},
 		},
@@ -68,8 +68,9 @@ func (controller BookingController) CreateCheckoutSession(w http.ResponseWriter,
 	s, err := session.New(params)
 	if err != nil {
 		log.Printf("session.New: %v", err)
+		logger.Error(err)
 	}
-	http.Redirect(w, r, s.URL, http.StatusSeeOther)
+	utils.ResponseWithJson(w, http.StatusOK, utils.ResponseError{Message: s.URL})
 }
 
 func (controller BookingController) PostOrder(w http.ResponseWriter, r *http.Request) {
