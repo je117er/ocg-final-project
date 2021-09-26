@@ -6,22 +6,22 @@ import (
 )
 
 type Booking struct {
-	ID                sql.NullInt64
-	CustomerID        int64
-	DateRegistered    sql.NullTime
-	DateBooked        sql.NullTime
-	TimePeriod        sql.NullInt64
-	DosesCompleted    sql.NullInt64
+	ID                 sql.NullInt64
+	CustomerID         int64
+	DateRegistered     sql.NullTime
+	DateBooked         sql.NullTime
+	TimePeriod         sql.NullInt64
+	DosesCompleted     sql.NullInt64
 	VaccineName        sql.NullString
 	AuthorizedInterval sql.NullInt64
 	LotNumber          sql.NullString
-	ClinicName        sql.NullString
-	Price             sql.NullString
-	SentReminderEmail sql.NullInt64
-	SessionCapacityID sql.NullInt64
-	TotalBill         sql.NullString
-	PaymentStatus     sql.NullBool
-	StockItemID       sql.NullString
+	ClinicName         sql.NullString
+	Price              sql.NullString
+	SentReminderEmail  sql.NullInt64
+	SessionCapacityID  sql.NullInt64
+	TotalBill          sql.NullString
+	PaymentStatus      sql.NullBool
+	StockItemID        sql.NullString
 }
 
 type VaccinationResponse struct {
@@ -55,27 +55,27 @@ type CustomerOrderRequest struct {
 }
 
 type ConditionOrderRequest struct {
-	Code            string `json:"code"`
+	Code            int    `json:"code"`
 	Description     string `json:"description"`
-	ConditionStatus bool   `json:"condition_status"`
+	ConditionStatus bool `json:"condition_status"`
 }
 
 type OrderRequest struct {
-	CustomerOrderRequest  CustomerOrderRequest `json:"customer_order_request"`
+	CustomerOrderRequest  CustomerOrderRequest    `json:"customer_order_request"`
 	ConditionOrderRequest []ConditionOrderRequest `json:"condition_order_request"`
-	DateRegistered        time.Time `json:"date_registered"`
-	DateBooked            time.Time `json:"date_booked"`
-	TimePeriod            int64     `json:"time_period"`
-	DosesCompleted        int64     `json:"doses_completed"`
-	VaccineName           string    `json:"vaccine_name"`
-	AuthorizedInterval    int       `json:"authorized_interval"`
-	LotNumber             string    `json:"lot_number"`
-	ClinicName            string    `json:"clinic_name"`
-	Price                 int       `json:"price"`
-	SentReminderEmail     int64     `json:"sent_reminder_email"`
-	SessionCapacityID     int64     `json:"session_capacity_id"`
-	TotalBill             int       `json:"total_bill"`
-	StockItemID           string    `json:"stock_item_id"`
+	DateRegistered        time.Time               `json:"date_registered"`
+	DateBooked            time.Time               `json:"date_booked"`
+	TimePeriod            int64                   `json:"time_period"`
+	DosesCompleted        int64                   `json:"doses_completed"`
+	VaccineName           string                  `json:"vaccine_name"`
+	AuthorizedInterval    int                     `json:"authorized_interval"`
+	LotNumber             string                  `json:"lot_number"`
+	ClinicName            string                  `json:"clinic_name"`
+	Price                 int                     `json:"price"`
+	SentReminderEmail     int64                   `json:"sent_reminder_email"`
+	SessionCapacityID     int64                   `json:"session_capacity_id"`
+	TotalBill             int                     `json:"total_bill"`
+	StockItemID           string                  `json:"stock_item_id"`
 }
 
 type CreateCheckoutSessionRequest struct {

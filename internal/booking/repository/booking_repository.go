@@ -83,22 +83,15 @@ func (repository *BookingRepository) InsertOrder(ctx context.Context, r models.O
 	//	return err
 	//}
 
-	row := repository.conn.QueryRowContext(ctx,"select @customerID:=max(customer.id) + 1\nfrom customer;")
-	var customerID int
-	if err := row.Scan(&customerID); err != nil {
-		logger.Error(err)
-		return err
-	}
+	query := `insert into customer (email, name, address, gender, phone_number, insurance_number, city, district, commune, ethnicity, nationality)
+value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 
-	query := `insert into customer (email, name, address, gender, dob, phone_number, insurance_number, city, district, commune, ethnicity, nationality)
-value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
-
-	_, err := repository.conn.ExecContext(ctx, query,
+	res, err := repository.conn.ExecContext(ctx, query,
 		r.CustomerOrderRequest.Email,
 		r.CustomerOrderRequest.CustomerName,
 		r.CustomerOrderRequest.Address,
 		r.CustomerOrderRequest.Gender,
-		r.CustomerOrderRequest.DoB,
+		//r.CustomerOrderRequest.DoB,
 		r.CustomerOrderRequest.PhoneNumber,
 		r.CustomerOrderRequest.InsuranceNumber,
 		r.CustomerOrderRequest.City,
@@ -112,11 +105,17 @@ value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 		return err
 	}
 
+	id, err := res.LastInsertId()
+	if err != nil {
+		logger.Error(err)
+		return err
+	}
+
 	query = `INSERT INTO medical_condition (code, description, condition_status, customer_id) 
-VALUES (?, ?, ?, @customerID);`
+VALUES (?, ?, ?, ?);`
 	conditionReq := r.ConditionOrderRequest
 	for _, req := range conditionReq {
-		_, err := repository.conn.ExecContext(ctx, query, req.Code, req.Description, req.ConditionStatus)
+		_, err := repository.conn.ExecContext(ctx, query, req.Code, req.Description, req.ConditionStatus, id)
 		if err != nil {
 			logger.Error(err)
 			return nil
@@ -127,8 +126,9 @@ VALUES (?, ?, ?, @customerID);`
                      time_period, doses_completed, vaccine_name, authorized_interval, 
                      lot_number, clinic_name, price, sent_reminder_email, session_capacity_id, 
                      total_bill, payment_status, stock_item_id)
-				values (@customerID, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+				values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	_, err = repository.conn.ExecContext(ctx, query,
+		id,
 		r.DateRegistered,
 		r.DateBooked,
 		r.TimePeriod,

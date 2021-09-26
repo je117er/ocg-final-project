@@ -20,7 +20,7 @@ func NewBookingService(bookingRepository booking.Repository, sockRepository stoc
 var logger = utils.SugarLog()
 
 func (service *BookingService) InsertOrder(ctx context.Context, r models.OrderRequest) error {
-	err := service.InsertOrder(ctx, r)
+	err := service.BookingRepository.InsertOrder(ctx, r)
 	if err != nil {
 		logger.Error(err)
 		return err
