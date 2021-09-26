@@ -79,7 +79,6 @@ type OrderRequest struct {
 }
 
 type CreateCheckoutSessionRequest struct {
-	CustomerID int    `json:"customer_id"`
 	TotalBill  int    `json:"total_bill"`
 	Quantity   int    `json:"quantity"`
 	SuccessURL string `json:"success_url"`

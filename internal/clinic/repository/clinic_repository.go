@@ -69,7 +69,6 @@ join stock_item si on clinic.id = si.clinic_id
 where si.name like ?;
 `
 	rows, err := repository.conn.QueryContext(ctx, query, vaccine)
-	logger.Info(rows)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
