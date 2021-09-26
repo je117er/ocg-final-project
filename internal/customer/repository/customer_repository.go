@@ -184,8 +184,8 @@ func (repository *CustomerRepository) GetUnSendEmails(ctx context.Context, limit
 					   END AS time_period,
 				   date_add(b.date_booked, INTERVAL b.authorized_interval DAY) AS date
 			FROM customer c INNER JOIN booking b ON c.id = b.customer_id
-			WHERE b.doses_completed = 1
-			  AND b.sent_reminder_email = 0
+			WHERE
+				b.sent_reminder_email = 0
 			  AND current_date() = date_add(b.date_booked, INTERVAL (b.authorized_interval - 1) DAY)
 			ORDER BY b.date_registered LIMIT ?;`
 
