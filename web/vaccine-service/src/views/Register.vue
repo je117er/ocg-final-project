@@ -287,6 +287,7 @@ export default {
       selectedSession: 0,
       minimumAge: 0,
       sessionType,
+      totalDoses: 0,
       customerInfo: {
         customer_name: '',
         gender: '',
@@ -407,13 +408,24 @@ export default {
 
       Vue.axios.post('http://localhost:8088/order', orderRequest).then((response) => {
         console.log(response.data);
+
+        const checkoutRequest = {};
+        checkoutRequest.total_bill = this.totalPrice;
+        checkoutRequest.quantity = 2;
+        checkoutRequest.success_url = 'http://localhost:8080/payment-success';
+        checkoutRequest.cancel_url = 'http://localhost:8080/';
+        Vue.axios.post('http://localhost:8088/create-checkout-session', checkoutRequest).then((checkoutResponse) => {
+          console.log(checkoutResponse.data);
+        }).catch((e) => {
+          console.log(e);
+        });
       }).catch((e) => {
         console.log(e);
       });
 
       // orderRequest.date_registered = new Date();
       console.log(JSON.stringify(orderRequest));
-      alert('yay!');
+      // alert('yay!');
     },
     handleErrorMessage(errorMsg) {
       this.errorMsg = String(errorMsg).substring(7);

@@ -21,6 +21,11 @@ const routes = [
     component: () => import('../views/Register.vue'),
   },
   {
+    path: '/payment-success',
+    name: 'Payment Success',
+    component: () => import('../views/PaymentSuccess.vue'),
+  },
+  {
     path: '/customer',
     name: 'customer-home',
     component: () => import('../views/CustomerHome.vue'),
