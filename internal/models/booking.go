@@ -61,8 +61,8 @@ type ConditionOrderRequest struct {
 }
 
 type OrderRequest struct {
-	CustomerOrderRequest  CustomerOrderRequest
-	ConditionOrderRequest []ConditionOrderRequest
+	CustomerOrderRequest  CustomerOrderRequest `json:"customer_order_request"`
+	ConditionOrderRequest []ConditionOrderRequest `json:"condition_order_request"`
 	DateRegistered        time.Time `json:"date_registered"`
 	DateBooked            time.Time `json:"date_booked"`
 	TimePeriod            int64     `json:"time_period"`

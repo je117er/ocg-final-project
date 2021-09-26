@@ -4,7 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"github.com/je117er/ocg-final-project/internal/models"
+	"github.com/je117er/ocg-final-project/internal/utils"
 )
+
+var logger = utils.SugarLog()
 
 type ProductRepository struct {
 	Conn *sql.DB
@@ -62,9 +65,10 @@ func (p *ProductRepository) ByID(ctx context.Context, id string) (*models.Produc
 }
 
 func (p *ProductRepository) AllNameID(ctx context.Context) ([]models.ProductNameID, error) {
-	query := `select id, name from product`
+	query := `select id, name, immunization_schedule, price from product`
 	rows, err := p.Conn.QueryContext(ctx, query)
 	if err != nil {
+		logger.Error(err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -73,16 +77,19 @@ func (p *ProductRepository) AllNameID(ctx context.Context) ([]models.ProductName
 	var product models.ProductNameID
 
 	for rows.Next() {
-		if err := rows.Scan(&product.ID, &product.Name); err != nil {
+		if err := rows.Scan(&product.ID, &product.Name, &product.ImmunizationSchedule, &product.Price); err != nil {
+			logger.Error(err)
 			continue
 		}
 		products = append(products, product)
 	}
 	rerr := rows.Close()
 	if rerr != nil {
+		logger.Error(err)
 		return nil, rerr
 	}
 	if err := rows.Err(); err != nil {
+		logger.Error(err)
 		return nil, err
 	}
 	return products, nil
