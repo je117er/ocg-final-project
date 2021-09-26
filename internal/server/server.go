@@ -67,7 +67,7 @@ func InitServer() error {
 	clinicServ := clinicService.NewClinicService(clinicRepo)
 	adminServ := adminService.NewAdminService(adminRepo)
 	conditionServ := conditionService.NewConditionService(conditionRepo)
-	bookingServ := bookingService.NewBookingService(bookingRepo, stockRepo)
+	bookingServ := bookingService.NewBookingService(bookingRepo, stockRepo, customerRepo, constraintRepo, sessionRepo)
 	sessionServ := sessionService.NewSessionService(sessionRepo)
 
 	// Guest

@@ -76,59 +76,20 @@ func (repository *BookingRepository) GetByID(ctx context.Context, id int) (*mode
 	return repository.getOne(ctx, query, id)
 }
 
-func (repository *BookingRepository) InsertOrder(ctx context.Context, r models.OrderRequest) error {
-	//tx, err := repository.conn.BeginTx(ctx, nil)
-	//if err != nil {
-	//	logger.Error(err)
-	//	return err
-	//}
-
-	query := `insert into customer (email, name, address, gender, phone_number, insurance_number, city, district, commune, ethnicity, nationality)
-value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
-
-	res, err := repository.conn.ExecContext(ctx, query,
-		r.CustomerOrderRequest.Email,
-		r.CustomerOrderRequest.CustomerName,
-		r.CustomerOrderRequest.Address,
-		r.CustomerOrderRequest.Gender,
-		//r.CustomerOrderRequest.DoB,
-		r.CustomerOrderRequest.PhoneNumber,
-		r.CustomerOrderRequest.InsuranceNumber,
-		r.CustomerOrderRequest.City,
-		r.CustomerOrderRequest.District,
-		r.CustomerOrderRequest.Commune,
-		r.CustomerOrderRequest.Ethnicity,
-		r.CustomerOrderRequest.Nationality,
-	)
+func (repository *BookingRepository) SaveOrder(ctx context.Context, r models.OrderRequest, customerID int) (*sql.Tx, error) {
+	tx, err := repository.conn.BeginTx(ctx, nil)
 	if err != nil {
 		logger.Error(err)
-		return err
+		return tx, err
 	}
 
-	id, err := res.LastInsertId()
-	if err != nil {
-		logger.Error(err)
-		return err
-	}
-
-	query = `INSERT INTO medical_condition (code, description, condition_status, customer_id) 
-VALUES (?, ?, ?, ?);`
-	conditionReq := r.ConditionOrderRequest
-	for _, req := range conditionReq {
-		_, err := repository.conn.ExecContext(ctx, query, req.Code, req.Description, req.ConditionStatus, id)
-		if err != nil {
-			logger.Error(err)
-			return nil
-		}
-	}
-
-	query = `insert into booking (customer_id, date_registered, date_booked, 
+	query := `insert into booking (customer_id, date_registered, date_booked, 
                      time_period, doses_completed, vaccine_name, authorized_interval, 
                      lot_number, clinic_name, price, sent_reminder_email, session_capacity_id, 
                      total_bill, payment_status, stock_item_id)
 				values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
-	_, err = repository.conn.ExecContext(ctx, query,
-		id,
+	_, err = tx.ExecContext(ctx, query,
+		customerID,
 		r.DateRegistered,
 		r.DateBooked,
 		r.TimePeriod,
@@ -146,28 +107,11 @@ VALUES (?, ?, ?, ?);`
 	)
 	if err != nil {
 		logger.Error(err)
-		return err
+		tx.Rollback()
+		return tx, err
 	}
 
-	query = `update session_capacity
-set slot_left = slot_left - 1
-where id = ?`
-	_, err = repository.conn.ExecContext(ctx, query, r.SessionCapacityID)
-	if err != nil {
-		logger.Error(err)
-		return err
-	}
-
-	query = `update stock_item
-set stock_left = stock_left - 1
-where id = ?`
-	_, err = repository.conn.ExecContext(ctx, query, r.StockItemID)
-	if err != nil {
-		logger.Error(err)
-		return err
-	}
-
-	return nil
+	return tx, nil
 }
 func (repository *BookingRepository) UpdateCompleted(ctx context.Context, id int, completed int) error {
 	query := `UPDATE booking SET doses_completed = ? WHERE id =?`

@@ -51,7 +51,7 @@ func (repository *SessionRepository) GetSessionByClinic(ctx context.Context, cli
 		join clinic c on s.clinic_id = c.id
 		where s.slot_left > 0 && s.status <> 0 && c.name like ?`
 	logger.Info(query)
-	rows, err := repository.conn.QueryContext(ctx, query, "%" + clinicName + "%")
+	rows, err := repository.conn.QueryContext(ctx, query, "%"+clinicName+"%")
 	if err != nil {
 		return nil, err
 	}
@@ -96,4 +96,24 @@ func (repository *SessionRepository) Update(ctx context.Context, request *models
 
 	return nil
 
+}
+
+func (repository *SessionRepository) UpdateCapacity(ctx context.Context, value int, id int64) (*sql.Tx, error) {
+	tx, err := repository.conn.BeginTx(ctx, nil)
+	if err != nil {
+		logger.Error(err)
+		return tx, err
+	}
+
+	query := `UPDATE session_capacity
+			SET slot_left = slot_left - ?
+			WHERE id = ?`
+	_, err = tx.ExecContext(ctx, query, value, id)
+	if err != nil {
+		logger.Error(err)
+		tx.Rollback()
+		return tx, err
+	}
+
+	return tx, nil
 }

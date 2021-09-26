@@ -2,6 +2,7 @@ package customer
 
 import (
 	"context"
+	"database/sql"
 	"github.com/je117er/ocg-final-project/internal/models"
 )
 
@@ -14,4 +15,6 @@ type Repository interface {
 	GetCertByID(ctx context.Context, id int) (*models.CustomerResponse, error)
 	GetAllByClinicID(ctx context.Context, id string) ([]*models.Customer, error)
 	GetUnSendEmails(ctx context.Context, limit int) ([]*models.SentMail, error)
+	SaveCustomer(ctx context.Context, c models.CustomerOrderRequest) (int, *sql.Tx, error)
+	DeleteByID(ctx context.Context, id int) error
 }

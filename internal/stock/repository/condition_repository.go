@@ -42,3 +42,22 @@ func (repository *StockRepository) GetByID(ctx context.Context, id string) (*mod
 	query := "SELECT * FROM `stock_item` WHERE id = ?"
 	return repository.getOne(ctx, query, id)
 }
+
+func (repository *StockRepository) UpdateStock(ctx context.Context, value int, id string) (*sql.Tx, error) {
+	tx, err := repository.conn.BeginTx(ctx, nil)
+	if err != nil {
+		logger.Error(err)
+		return tx, err
+	}
+
+	query := `update stock_item
+			set stock_left = stock_left - ?
+			where id = ?`
+	_, err = tx.ExecContext(ctx, query, value, id)
+	if err != nil {
+		logger.Error(err)
+		tx.Rollback()
+		return tx, err
+	}
+	return tx, nil
+}

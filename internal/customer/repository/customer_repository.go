@@ -211,3 +211,57 @@ func (repository *CustomerRepository) GetUnSendEmails(ctx context.Context, limit
 
 	return result, nil
 }
+
+func (repository *CustomerRepository) SaveCustomer(ctx context.Context, c models.CustomerOrderRequest) (int, *sql.Tx, error) {
+	tx, err := repository.conn.BeginTx(ctx, nil)
+	if err != nil {
+		logger.Error(err)
+		return 0, tx, err
+	}
+
+	query := `insert into customer (email, name, address, gender, dob, phone_number, insurance_number, city, district, commune, ethnicity, nationality)
+				value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+
+	res, err := tx.ExecContext(ctx, query,
+		c.Email,
+		c.CustomerName,
+		c.Address,
+		c.Gender,
+		c.DoB,
+		c.PhoneNumber,
+		c.InsuranceNumber,
+		c.City,
+		c.District,
+		c.Commune,
+		c.Ethnicity,
+		c.Nationality,
+	)
+	if err != nil {
+		logger.Error(err)
+		tx.Rollback()
+		return 0, tx, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		logger.Error(err)
+		tx.Rollback()
+		return 0, tx, err
+	}
+	if err := tx.Commit(); err != nil {
+		logger.Error(err)
+		return int(id), tx, err
+	}
+	return int(id), tx, nil
+}
+
+func (repository *CustomerRepository) DeleteByID(ctx context.Context, id int) error {
+	query := `DELETE FROM customer WHERE id = ?`
+	_, err := repository.conn.ExecContext(ctx, query, id)
+	if err != nil {
+		logger.Error(err)
+		return err
+	}
+
+	return nil
+}
